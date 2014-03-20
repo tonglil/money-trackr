@@ -1,0 +1,24 @@
+{
+  "name": "you-owe-me",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "gulp"
+  },
+  "dependencies": {
+    "express": "3.5.x",
+    "jade": "1.3.x",
+    "async": "0.2.x",
+    "mysql": "2.1.x",
+    "sequelize": "1.7.0",
+    "passport": "^0.2.0",
+    "passport-local": "^1.0.0",
+    "passport-facebook": "^1.0.3",
+    "node-uuid": "^1.4.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.5.5",
+    "gulp-jshint": "^1.5.0",
+    "jshint-stylish": "^0.1.5"
+  }
+}
