@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    if title
+      title= title + ' - ' + 'You Owe Me'
+    else
+      title= 'You Owe Me'
+    link(rel='stylesheet', href='/css/bootstrap.css')
+    link(rel='stylesheet', href='/css/local.css')
+  body
+    .nav
+    .container
+      block content
+    footer
+      include includes/footer
