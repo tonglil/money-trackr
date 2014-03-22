@@ -5,11 +5,27 @@ html
       title= title + ' - ' + 'You Owe Me'
     else
       title= 'You Owe Me'
-    link(rel='stylesheet', href='/css/bootstrap.css')
-    link(rel='stylesheet', href='/css/local.css')
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/lumen.min.css')
+    link(rel='stylesheet', href='/css/local.min.css')
   body
-    .nav
+    include includes/nav
+    include includes/flash
     .container
-      block content
-    footer
-      include includes/footer
+      .row.row-offcanvas.row-offcanvas-right
+        .col-xs-12.col-sm-9
+          block content
+        // /span
+        #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas.well.well-sm(role='navigation')
+          if (auth)
+            img.profile-picture.img-circle.center-block(src='http://graph.facebook.com/' + auth.id + '/picture' alt='Profile Picture')
+          .nav.nav-pills.nav-stacked
+            li.active
+              a(href='#') Profile
+            li
+              a(href='#') Trackd Tabs
+            li
+              a(href='/logout') Log out
+        // /span
+      // /row
+    include includes/footer

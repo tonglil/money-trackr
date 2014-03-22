@@ -5,10 +5,12 @@ middlewares.Auth = {
     if (req.isAuthenticated()) {
       next();
     } else {
+      req.flash('error', 'You need to be logged in to do that!');
       res.redirect('/login');
     }
   },
 
+  //TODO: what is this used for?
   userExist: function(req, res, next) {
     var User = require('../models').User;
 
@@ -20,14 +22,21 @@ middlewares.Auth = {
       if (count === 0) {
         next();
       } else {
-        //req.session.error = 'User Exists';
+        //req.flash('error', 'That user already exists.');
         res.redirect("/login");
       }
     });
   },
+};
 
+middlewares.Render = {
   user: function(req, res, next) {
     res.locals.user = req.user;
+    next();
+  },
+
+  flash: function(req, res, next) {
+    res.locals.request = req;
     next();
   }
 };

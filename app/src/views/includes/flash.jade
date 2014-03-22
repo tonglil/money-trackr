@@ -1,0 +1,30 @@
+.container
+  .flash
+    - var flash = request.flash()
+    if flash
+      //TODO: transform into mixin
+      if flash.error
+        - for (var msg in flash.error) {
+        //-span.error= flash.error[msg]
+        div.alert.alert-dismissable.alert-danger
+          button.close(type='button', data-dismiss='alert') ×
+          = flash.error[msg]
+        - }
+      if flash.warning
+        - for (var msg in flash.warning) {
+        div.alert.alert-dismissable.alert-warning
+          button.close(type='button', data-dismiss='alert') ×
+          = flash.warning[msg]
+        - }
+      if flash.success
+        - for (var msg in flash.success) {
+        div.alert.alert-dismissable.alert-success
+          button.close(type='button', data-dismiss='alert') ×
+          = flash.success[msg]
+        - }
+      if flash.info
+        - for (var msg in flash.info) {
+        div.alert.alert-dismissable.alert-info
+          button.close(type='button', data-dismiss='alert') ×
+          = flash.info[msg]
+        - }

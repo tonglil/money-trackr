@@ -3,30 +3,26 @@
  */
 
 var Sequelize = require('sequelize');
+var env = require('../config').env;
 var config = require('../config').database;
 
-var db = new Sequelize(config.name, config.username, config.password, config.options);
+var db = new Sequelize(config.name, config[env].username, config[env].password, config.options);
 
 var data = {};
 
 var models = [
-    'User',
-    'Faculty',
-    'Subject',
-    'Course',
-    'Score',
-    'UserScores',
-    'AuthProvider',
+  'User',
+  'AuthProvider',
 ];
 
 models.forEach(function(model) {
-    data[model] = db.import(__dirname + '/' + model);
+  data[model] = db.import(__dirname + '/' + model);
 });
 
 Object.keys(data).forEach(function(modelName) {
-    if (data[modelName].options.hasOwnProperty('associate')) {
-        data[modelName].options.associate(data);
-    }
+  if (data[modelName].options.hasOwnProperty('associate')) {
+    data[modelName].options.associate(data);
+  }
 });
 
 data.Sequelize = Sequelize;

@@ -46,6 +46,9 @@ module.exports = function(DB, Type) {
     lastName: {
       type: Type.STRING
     },
+    friends: {
+      type: Type.TEXT,
+    },
     UserId: {
       type: Type.STRING,
       references: 'Users',

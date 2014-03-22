@@ -5,7 +5,9 @@
 var express = require('express');
 var path = require('path');
 var passport = require('passport');
-var config = require('./settings').app;
+var flash = require('connect-flash');
+
+var config = require('./index').app;
 var middlewares = require('../controllers/middlewares');
 
 module.exports = function (app) {
@@ -20,11 +22,13 @@ module.exports = function (app) {
     app.use(express.urlencoded());
     //TODO: use real secret
     app.use(express.session({ secret: 'secrets are good' }));
+    app.use(flash());
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(express.static(path.join(__dirname, '../public')));
     //app.use(express.csrf());
-    app.use(middlewares.Auth.user);
+    app.use(middlewares.Render.user);
+    app.use(middlewares.Render.flash);
     app.use(app.router);
     app.use(middlewares.Errors.log);
     app.use(middlewares.Errors.clientHandler);

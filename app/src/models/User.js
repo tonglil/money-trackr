@@ -66,12 +66,9 @@ module.exports = function(DB, Type) {
     }
   }, {
     associate: function(models) {
-      User.hasMany(models.Score, {
-        as: 'Scores',
-        through: models.UserScores
-      });
-      User.hasMany(models.AuthProvider, {
-        as: 'AuthProviders'
+      //TODO: hasMany, differentiate between them (friendlists, picurls, etc)
+      User.hasOne(models.AuthProvider, {
+        as: 'AuthProvider'
       });
     },
     classMethods: {

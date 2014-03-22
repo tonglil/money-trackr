@@ -50,6 +50,7 @@ module.exports = function(passport) {
     clientSecret    : auth.facebookAuth.clientSecret,
     callbackURL     : auth.facebookAuth.callbackURL
   }, function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
     AuthProvider.find({
       where: {
         provider: 'facebook',
@@ -63,8 +64,11 @@ module.exports = function(passport) {
           token: accessToken,
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
-          email: profile.emails[0].value
+          email: profile.emails[0].value,
+          pictureUrl: null,
+          friends: null
         }).success(function(facebook) {
+          console.log('==========hi==========', facebook);
           doFacebook(facebook);
         }).error(function(err) {
           return done(err);
@@ -82,7 +86,7 @@ module.exports = function(passport) {
           if (err) return done(err);
 
           facebook.setUser(user).success(function() {
-            return done(null, user);
+            return done(null, user, 'new');
           });
         });
       } else {

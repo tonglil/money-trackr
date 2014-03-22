@@ -3,99 +3,73 @@
  */
 
 module.exports = function(app, passport) {
-  app.get('/register', function(req, res) {
-    res.render('register');
-  });
-
-  /*
-   *@param email
-   *@param password
-   *@param fname
-   *@param lname
-   */
-  app.post('/register', function(req, res, next) {
-    var models = require('../models');
-    var User = models.User;
-
-    if (!req.body.password) {
-      return res.render('register', {
-        info: 'Enter a password'
-      });
-    }
-
-    User.register(req.body.email, req.body.password, req.body.fname, req.body.lname, function(err, user) {
-      if (err === 'user already exists') {
-        return res.render('register', {
-          info: 'User already exists'
-        });
-      }
-      if (err) return next(err);
-
-      passport.authenticate('local', function(err, user, info) {
-        if (err) return next(err);
-        if (!user) return res.redirect('/login');
-        req.logIn(user, function(err) {
-          if (err) return next(err);
-          return res.redirect('/');
-        });
-      })(req, res, next);
-    });
-  });
-
   app.get('/login', function(req, res) {
     if (req.user) {
+      req.flash('info', 'You are already logged in.');
       return res.redirect('/');
     } else {
       return res.render('login');
     }
   });
 
-  /*
-   *@param email
-   *@param password
-   */
-  app.post('/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err === 'no user') {
-        return res.render('login', {
-          info: 'User does not exist'
-        });
-      }
-      if (err === 'no password') {
-        //TODO: tell them to set a password
-        return res.render('login', {
-          info: 'Use social media with that email'
-        });
-      }
-      if (err === 'incorrect password') {
-        return res.render('login', {
-          info: 'Incorrect password'
-        });
-      }
-      if (err) return next(err);
-      req.logIn(user, function(err) {
-        if (err) return next(err);
-        return res.redirect('/');
-      });
-    })(req, res, next);
-  });
-
   app.get('/auth/facebook', passport.authenticate('facebook', {
-    scope: 'email'
+    display: 'touch',
+    scope: [
+      'email'
+    ]
   }));
+
+  var graph = require('fbgraph');
+  var async = require('async');
 
   app.get('/auth/facebook/callback', function(req, res, next) {
     passport.authenticate('facebook', function(err, user, info) {
       if (err) return next(err);
       req.logIn(user, function(err) {
         if (err) return next(err);
-        return res.redirect('/');
+        if (info == 'new') {
+          req.flash('success', 'Welcome to Money Trackr, ' + req.user.firstName + '!');
+        } else {
+          req.flash('info', 'Welcome back, ' + req.user.firstName + '.');
+        }
+        //return res.redirect('/');
+        res.redirect('/');
+
+        req.user.getAuthProvider().success(function(provider) {
+          var days = (provider.updatedAt - Date.now()) / (1000*60*60*24);
+          if (days > 1) {
+            graph.setAccessToken(provider.token);
+
+            async.parallel([
+              function(callback) {
+              graph.get('me/picture', function(err, picture) {
+                provider.pictureUrl = picture.location;
+                provider.save().success(function() {
+                  callback(null, picture);
+                });
+              });
+            },
+            function(callback) {
+              graph.get('me/friends', function(err, friends) {
+                var serialized = JSON.stringify(friends);
+                provider.friends = serialized;
+                provider.save().success(function() {
+                  callback();
+                });
+              });
+            }
+            ], function(err) {
+              if (err) return next(err);
+            });
+          }
+        });
       });
     })(req, res, next);
   });
 
   app.get('/logout', function(req, res){
     req.logout();
+    req.flash('info', 'You have successfully logged out.');
     res.redirect('/');
   });
 };
