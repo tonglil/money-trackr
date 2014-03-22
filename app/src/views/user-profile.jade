@@ -1,36 +1,33 @@
 extends layout
 
 block content
-  .jumbotron
-    h1 Keep track of who you owe, and most importantly: 
-      strong who owes you
-      | !
-    form.form-signin(role='form')
-      p.form-signin-heading.text-center start now:
-      a.btn.btn-lg.btn-primary.btn-block(href='/auth/facebook') Sign In With Facebook
-  .row
-    .col-6.col-sm-6.col-lg-4
-      h2 Heading
-      p
-        | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(role='button', href='#') View details »
-    // /span
-    .col-6.col-sm-6.col-lg-4
-      h2 Heading
-      p
-        | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(role='button', href='#') View details »
-    // /span
-    .col-6.col-sm-6.col-lg-4
-      h2 Heading
-      p
-        | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(role='button', href='#') View details »
-    // /span
-  // /row
-  .container
+  .tab-content
+    #list.tab-pane.active
+      div.page-header
+        h2 Current Tabs
+      //for each...
+      .panel.panel-default
+        .panel-body.panel-sm
+          a.panel-expand(href="#")
+            .center-out
+              img.profile-picture.img-circle(src='http://graph.facebook.com/581601874/picture', alt='Profile Picture')
+              span.name Tony Li
+              .center-in.text-right
+                span.badge $42.50
+      .panel.panel-default
+        .panel-body.panel-sm
+          a.panel-expand(href="#")
+            .center-out
+              img.profile-picture.img-circle(src='http://graph.facebook.com/699807795/picture', alt='Profile Picture')
+              span.name Hamza Faran
+              span.center-in.text-right
+                span.badge $1234.56
+      .text-center
+        a#new-btn.btn.btn-info(href="#new" data-toggle="pill") +
+
+    #new.tab-pane
+      img.img-responsive(src='//placehold.it/600x400&text=list')
+    #pay.tab-pane.fade
+      img.img-responsive(src='//placehold.it/600x400&text=new')
 
 append script
