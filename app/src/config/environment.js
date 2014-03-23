@@ -10,7 +10,7 @@ var flash = require('connect-flash');
 var config = require('./index').app;
 var middlewares = require('../controllers/middlewares');
 
-module.exports = function (app) {
+module.exports = function(app) {
   app.configure(function() {
     app.set('port', config.port);
     app.use(express.logger('dev')); //Logs http requests in console
@@ -20,11 +20,10 @@ module.exports = function (app) {
     app.use(express.cookieParser());
     app.use(express.json());
     app.use(express.urlencoded());
-    //TODO: use real secret
-    app.use(express.session({ secret: 'secrets are good' }));
-    app.use(flash());
+    app.use(express.cookieSession({ secret: 'we track money', cookie: { maxAge: 60*60*1000 } }));
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use(flash());
     app.use(express.static(path.join(__dirname, '../dist')));
     //app.use(express.csrf());
     app.use(middlewares.Render.user);

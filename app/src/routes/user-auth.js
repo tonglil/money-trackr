@@ -39,27 +39,12 @@ module.exports = function(app, passport) {
           var days = (provider.updatedAt - Date.now()) / (1000*60*60*24);
           if (days > 1) {
             graph.setAccessToken(provider.token);
-
-            async.parallel([
-              function(callback) {
-              graph.get('me/picture', function(err, picture) {
-                provider.pictureUrl = picture.location;
-                provider.save().success(function() {
-                  callback(null, picture);
-                });
+            graph.get('me/friends', function(err, friends) {
+              var serialized = JSON.stringify(friends);
+              provider.friends = serialized;
+              provider.save().success(function() {
+                return;
               });
-            },
-            function(callback) {
-              graph.get('me/friends', function(err, friends) {
-                var serialized = JSON.stringify(friends);
-                provider.friends = serialized;
-                provider.save().success(function() {
-                  callback();
-                });
-              });
-            }
-            ], function(err) {
-              if (err) return next(err);
             });
           }
         });

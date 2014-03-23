@@ -6,7 +6,7 @@ module.exports = {
   'facebookAuth' : {
     'clientID'      : '227765214081308', // App ID
     'clientSecret'  : 'd32105c064d22868c498cd25e34e0fad', // App Secret
-    'callbackURL'   : 'http://localhost:3000/auth/facebook/callback'
+    'callbackURL'   : 'http://3000.tonyli.ca/auth/facebook/callback'
   },
   /*
    *'twitterAuth' : {
