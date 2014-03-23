@@ -5,6 +5,9 @@ body {
     /*min-height: 2000px;*/
     padding-top: 70px;
 }
+.navbar-default {
+    opacity: 0.93;
+}
 
 /*
  *Off canvas tab

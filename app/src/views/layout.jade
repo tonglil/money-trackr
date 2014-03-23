@@ -2,14 +2,23 @@ doctype html
 html
   head
     if title
-      title= title + ' - ' + 'You Owe Me'
+      title= title + ' - ' + 'Money Trackr'
     else
-      title= 'You Owe Me'
-    link(rel='stylesheet', href='/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/css/lumen.min.css')
-    link(rel='stylesheet', href='/css/local.min.css')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
-  body
+      title= 'Money Trackr'
+    link(rel='stylesheet' href='/css/bootstrap.min.css')
+    link(rel='stylesheet' href='/css/lumen.min.css')
+    link(rel='stylesheet' href='/css/local.min.css')
+    // Run in full-screen mode
+    meta(content='yes' name='apple-mobile-web-app-capable')
+    // Make the status bar solid
+    meta(content='black' name='apple-mobile-web-app-status-bar-style')
+    // Customize home screen title
+    meta(content=title name='apple-mobile-web-app-title')
+    // Set viewport
+    meta(name='viewport' content='width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=no')
+    link(rel='apple-touch-icon' href='/img/apple-touch-icon.png')
+    link(rel='apple-touch-startup-image', href='/img/apple-touch-startup-image.png')
+  body(ontouchmove="BlockMove(event);")
     include includes/nav
     include includes/flash
     .container.full

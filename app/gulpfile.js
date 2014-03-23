@@ -60,7 +60,7 @@ var paths = {
     '!./src/public/js/bootstrap.js'
   ],
   css: './src/public/css/*.css',
-  img: './src/public/img/'
+  img: './src/public/img/*'
 };
 
 gulp.task('src', function() {
