@@ -16,7 +16,7 @@ gulp.task('default', ['clean'], function() {
 
 gulp.task('clean', function() {
   return gulp.src([
-    './src/public/'
+    './src/dist/'
   ], {
     read: false
   })
@@ -39,7 +39,7 @@ gulp.task('dev', function() {
     },
     ignore: [
       './node_modules/**',
-      './src/public/**'
+      './src/dist/**'
     ]
   })
   .on('change', ['default'])
@@ -51,16 +51,16 @@ gulp.task('dev', function() {
 var paths = {
   src: [
     './src/**/*.js',
-    '!./src/build/**/*.js',
-    '!./src/public/**/*.js'
+    '!./src/public/**/*.js',
+    '!./src/dist/**/*.js'
   ],
   js: [
-    './src/build/js/*.js',
-    '!./src/build/js/jquery*.js',
-    '!./src/build/js/bootstrap.js'
+    './src/public/js/*.js',
+    '!./src/public/js/jquery*.js',
+    '!./src/public/js/bootstrap.js'
   ],
-  css: './src/build/css/*.css',
-  img: './src/build/img/'
+  css: './src/public/css/*.css',
+  img: './src/public/img/'
 };
 
 gulp.task('src', function() {
@@ -74,12 +74,12 @@ gulp.task('js', function() {
   .pipe(jshint())
   .pipe(jshint.reporter(stylish));
 
-  return gulp.src('./src/build/js/*.js')
+  return gulp.src('./src/public/js/*.js')
   .pipe(uglify())
   .pipe(rename({
     suffix: '.min'
   }))
-  .pipe(gulp.dest('./src/public/js/'));
+  .pipe(gulp.dest('./src/dist/js/'));
 });
 
 gulp.task('css', function() {
@@ -88,7 +88,7 @@ gulp.task('css', function() {
   .pipe(rename({
     suffix: '.min'
   }))
-  .pipe(gulp.dest('./src/public/css/'));
+  .pipe(gulp.dest('./src/dist/css/'));
 });
 
 gulp.task('img', function() {
@@ -99,5 +99,5 @@ gulp.task('img', function() {
     progressive: true,
     interlaced: true
   })))
-  .pipe(gulp.dest('./src/public/img/'));
+  .pipe(gulp.dest('./src/dist/img/'));
 });

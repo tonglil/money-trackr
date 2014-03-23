@@ -25,7 +25,7 @@ module.exports = function (app) {
     app.use(flash());
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use(express.static(path.join(__dirname, '../public')));
+    app.use(express.static(path.join(__dirname, '../dist')));
     //app.use(express.csrf());
     app.use(middlewares.Render.user);
     app.use(middlewares.Render.flash);
