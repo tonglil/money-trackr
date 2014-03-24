@@ -8,7 +8,7 @@ $(document).ready(function () {
     $('#sidebar').find('a[href="#new"]').parent().addClass('active');
   });
 
-  $(document).on('click', '.panel-heading span.panel-clickable', function (e) {
+  $(document).on('click', '.panel-heading span.panel-clickable', function(e) {
     var $this = $(this);
     if (!$this.hasClass('panel-collapsed')) {
       $this.parents('.panel').find('.panel-body').slideUp();
@@ -18,7 +18,7 @@ $(document).ready(function () {
       $this.removeClass('panel-collapsed');
     }
   });
-  $(document).on('click', '.panel div.panel-clickable', function (e) {
+  $(document).on('click', '.panel div.panel-clickable', function(e) {
     var $this = $(this);
     if (!$this.hasClass('panel-collapsed')) {
       $this.parents('.panel').find('.panel-body').slideUp();
@@ -31,9 +31,35 @@ $(document).ready(function () {
   $('.panel-heading span.panel-clickable').click();
   $('.panel div.panel-clickable').click();
 
+  $('#tip').change(function(){
+    $('#tipNum').text($(this).val() + '%');
+  });
+
+  $( document ).on('click', '.btn-add', function(e) {
+    e.preventDefault();
+
+    var field = $(this).closest('.form-group');
+    var field_new = field.clone();
+
+    $(this)
+    .toggleClass('btn-default')
+    .toggleClass('btn-add')
+    .toggleClass('btn-warning')
+    .toggleClass('btn-remove')
+    .html('–');
+
+    field_new.find('input').val( '' );
+    field_new.insertAfter( field );
+  });
+
+  $( document ).on('click', '.btn-remove', function(e) {
+    e.preventDefault();
+    $(this).closest('.form-group').remove();
+  });
+
   // For iOS Apps
   // Open all links in the iOS web app
-  if (("standalone" in window.navigator) && window.navigator.standalone) {
+  if (('standalone' in window.navigator) && window.navigator.standalone) {
     $('a').on('click', function(e){
       e.preventDefault();
       var new_location = $(this).attr('href');

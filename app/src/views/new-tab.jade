@@ -1,0 +1,46 @@
+.page-header
+  h2 New Tab
+
+form
+  .form-group
+    label Names
+    .form-group.input-group
+      input.form-control(type='text' name='multiple[]')
+      span.input-group-btn
+        button.btn.btn-default.btn-add(type='button') +
+    label Multiple selects
+    .form-group.input-group
+      select.form-control(name='multiple[]')
+        option(value='') Default select
+        option(value='') Option 1
+        option(value='') Option 2
+      span.input-group-btn
+        button.btn.btn-default.btn-add(type='button') +
+    label Multiple textareas
+    .form-group.input-group
+      textarea.form-control(rows='3' name='multiple[]')
+      span.input-group-btn
+        button.btn.btn-default.btn-add(type='button') +
+    label Tip (%)
+    .form-group.input-group.range
+      input(id='tip' type='range' oninput='tipNum.value=value' value='15' max='50' min='0' name='tip')
+      span.input-group-btn
+        #tipNum.btn.btn-default.btn-fake 15%
+      //-input(type='range' onchange='tips.value=value' value='50' max='100' min='1' name='tips')
+      //-output#tips.btn.btn-default.btn-fake 50
+    // Possible save receipt for proof
+    .form-group
+      label(for='exampleInputFile') File input
+      input#exampleInputFile(type='file')
+      p.help-block Example block-level help text here.
+
+h3 Total
+p $50.00
+
+
+
+
+hr
+
+.text-center
+  a#new-btn.btn.btn-info(href="#new" data-toggle="pill") Add
