@@ -80,8 +80,9 @@ html {
     min-height: 100%;
 }
 body {
+    padding-bottom: 20px;
     /* Margin bottom by footer height */
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     font-size: 16px;
 }
 footer {
@@ -131,13 +132,20 @@ footer .container p {
 .page-header {
     margin: 0 0 8px 0;
 }
-
 .page-header h2 {
     margin: 0;
 }
 
 .panel-sm {
     padding: 8px 16px;
+}
+.center-out {
+    display: table;
+    width: 100%;
+}
+.center-in {
+    display: table-cell;
+    vertical-align: baseline;
 }
 .panel img {
     margin: 0;
@@ -153,17 +161,33 @@ footer .container p {
     font-size: 14px;
     padding: 4px 8px;
 }
+.clickable {
+    cursor: pointer;
+}
+.panel-expand {
+    display: none;
+}
+.panel-table table {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+.panel-table th.date,
+.panel-table td.date {
+    width: 20%;
+    padding: 0;
+}
+.panel-table th.reason,
+.panel-table td.reason {
+    width: 60%;
+    padding: 0 0 0 8px;
+}
+.panel-table th.amount,
+.panel-table td.amount {
+    width: 20%;
+    padding: 0 0 0 8px;
+}
+
 #new-btn {
     font-size: 36px;
     padding: 0 24px;
-}
-
-
-.center-out {
-    display: table;
-    width: 100%;
-}
-.center-in {
-    display: table-cell;
-    vertical-align: baseline;
 }

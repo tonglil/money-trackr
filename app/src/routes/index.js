@@ -18,7 +18,7 @@ module.exports = function(app, passport) {
 
   app.get('/user/:id', Auth.authenticate, function(req, res, next) {
     req.user.getAuthProvider().success(function(provider) {
-      res.render('user-profile', {
+      res.render('user', {
         auth: provider.values
       });
     });
