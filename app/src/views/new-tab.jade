@@ -1,46 +1,70 @@
 .page-header
   h2 New Tab
 
-form
+form#new-tab(method='post' action='/tab/new')
+  label Amount owed $
   .form-group
-    label Names
-    .form-group.input-group
-      input.form-control(type='text' name='multiple[]')
-      span.input-group-btn
-        button.btn.btn-default.btn-add(type='button') +
-    label Multiple selects
-    .form-group.input-group
-      select.form-control(name='multiple[]')
-        option(value='') Default select
-        option(value='') Option 1
-        option(value='') Option 2
-      span.input-group-btn
-        button.btn.btn-default.btn-add(type='button') +
-    label Multiple textareas
-    .form-group.input-group
-      textarea.form-control(rows='3' name='multiple[]')
-      span.input-group-btn
-        button.btn.btn-default.btn-add(type='button') +
-    label Tip (%)
-    .form-group.input-group.range
-      input(id='tip' type='range' oninput='tipNum.value=value' value='15' max='50' min='0' name='tip')
-      span.input-group-btn
-        #tipNum.btn.btn-default.btn-fake 15%
-      //-input(type='range' onchange='tips.value=value' value='50' max='100' min='1' name='tips')
-      //-output#tips.btn.btn-default.btn-fake 50
-    // Possible save receipt for proof
-    .form-group
-      label(for='exampleInputFile') File input
-      input#exampleInputFile(type='file')
-      p.help-block Example block-level help text here.
+    input#amount.form-control(type='number' name='amount' autofocus data-toggle='tooltip' data-placement='top' title='required; must be a number')
 
-h3 Total
-p $50.00
+  label Name 
+    small (multiple names implies an even split)
+  .form-group.input-group
+    input.name.form-control(type='text' name='names[]' data-toggle='tooltip' data-placement='top' title='required')
+    span.input-group-btn
+      button.btn.btn-default.btn-add(type='button') +
 
+  label Description
+  .form-group
+    textarea.form-control(rows='3' name='description')
 
+  label Date
+  .form-group
+    input.form-control.date-input(type='date' name='date')
 
+  label Deadline
+  .form-group
+    input.form-control.date-input(type='date' name='deadline')
+
+  hr
+
+  .form-group
+    button#addTip.btn.btn-default.btn-block(type='button' name='addTip' value='false')
+      span.glyphicon.glyphicon-thumbs-up.glyphicon-pad-right
+      | Add Tip (%)
+
+  .form-group.range.temp-hide
+    input(id='tip' type='range' oninput='tipNum.value=value' value='15' max='50' min='0' name='tip')
+    span.input-group-btn
+      #tipNum.btn.btn-default.btn-fake 15%
+
+  hr
+
+  label Paid with
+  .form-group
+    select.form-control(name='payment')
+      option(value='cash') Cash
+      option(value='credit') Credit
+      option(value='debit') Debit
+      option(value='other') Other
+
+  // Possible save receipt for proof
+  label Upload receipt
+  .form-group.text-center
+    input.text-center.btn.btn-default.btn-block(type='file' name='receipt')
+
+  hr
+
+  h3 Total: 
+    | $
+    span.total 0.00
+    input.total(type='hidden' name='total' value='0')
+
+  hr
+
+  .text-center
+    input.btn.btn-info.btn-big(type='submit' value='Add Tab')
+    //-a#new-tab-submit.btn.btn-info.btn-big(href="#new" data-toggle="pill") Add
 
 hr
 
-.text-center
-  a#new-btn.btn.btn-info(href="#new" data-toggle="pill") Add
+#errors

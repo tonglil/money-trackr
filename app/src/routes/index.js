@@ -24,6 +24,12 @@ module.exports = function(app, passport) {
     });
   });
 
+  app.post('/tab/new', Auth.authenticate, function(req, res, next) {
+    var body = req.body;
+    console.log(body);
+    res.redirect('/user/' + req.user.uuid);
+  });
+
   require('./user-auth')(app, passport);
   require('./base')(app);
 };

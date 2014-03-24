@@ -8,6 +8,106 @@ $(document).ready(function () {
     $('#sidebar').find('a[href="#new"]').parent().addClass('active');
   });
 
+  function round(num) {
+    return (Math.round(num * 100) / 100).toFixed(2);
+  }
+
+  function setTotal(bool) {
+    var _tip = $('#tip');
+    var tip = _tip.val();
+    var _amount = $('#amount');
+    var amount = round(parseFloat(_amount.val()));
+    var total = amount;
+    if (bool) {
+      total = round(amount * (1 + (tip / 100)));
+    }
+    if (isNaN(amount)) {
+      total = round(0);
+    }
+    $('span.total').html(total);
+    $('input.total').val(total);
+  }
+
+  $('#addTip').click(function() {
+    var el = $(this);
+    if (el.val() === 'true') {
+      // Remove tip
+      el.val('false');
+      el.removeClass();
+      el.addClass('btn btn-block btn-default');
+      el.parent().next('.range').slideUp(0);
+      setTotal(false);
+    } else {
+      // Add tip
+      el.val('true');
+      el.removeClass();
+      el.addClass('btn btn-block btn-success');
+      el.parent().next('.range').addClass('range-table').slideDown(0);
+      setTotal(true);
+    }
+  });
+
+  $('#tip').change(function(){
+    $('#tipNum').text($(this).val() + '%');
+    setTotal(true);
+  });
+
+  $('#amount').on('focus keyup', function() {
+    var el = $('#addTip');
+    if (el.val() === 'true') {
+      // Has tip
+      setTotal(true);
+    } else {
+      // No tip
+      setTotal(false);
+    }
+  });
+
+  // Form field validation
+  $('#amount').on('focus keyup', function() {
+    var _amount = $(this);
+    var amount = parseFloat(_amount.val());
+    if (isNaN(amount)) {
+      _amount.parent().removeClass('has-success').addClass('has-error');
+      _amount.tooltip('show');
+    } else {
+      _amount.parent().removeClass('has-error').addClass('has-success');
+      _amount.tooltip('hide');
+    }
+  });
+  $(document).on('focus keyup', 'input.name', function() {
+    var _name = $(this);
+    var name = _name.val().trim();
+    if (!name) {
+      _name.parent().removeClass('has-success').addClass('has-error');
+      _name.tooltip('show');
+    } else {
+      _name.parent().removeClass('has-error').addClass('has-success');
+      _name.tooltip('hide');
+    }
+  });
+
+  // Form submission validation
+  $('#new-tab').submit(function(e) {
+    var _amount = $('#amount');
+    var amount = parseFloat(_amount.val());
+    if (isNaN(amount)) {
+      _amount.focus().parent().addClass('has-error');
+      return e.preventDefault();
+    } else {
+      var _names = $('input.name');
+      _names.each(function() {
+        var _name = $(this);
+        var name = _name.val().trim();
+        if (!name) {
+          _name.focus().parent().addClass('has-error');
+          return e.preventDefault();
+        }
+      });
+    }
+  });
+
+  // Expand/collapse panels
   $(document).on('click', '.panel-heading span.panel-clickable', function(e) {
     var $this = $(this);
     if (!$this.hasClass('panel-collapsed')) {
@@ -31,28 +131,24 @@ $(document).ready(function () {
   $('.panel-heading span.panel-clickable').click();
   $('.panel div.panel-clickable').click();
 
-  $('#tip').change(function(){
-    $('#tipNum').text($(this).val() + '%');
-  });
-
-  $( document ).on('click', '.btn-add', function(e) {
+  // Add extra form fields
+  $(document).on('click', '.btn-add', function(e) {
     e.preventDefault();
-
     var field = $(this).closest('.form-group');
     var field_new = field.clone();
-
     $(this)
     .toggleClass('btn-default')
     .toggleClass('btn-add')
     .toggleClass('btn-warning')
     .toggleClass('btn-remove')
     .html('–');
-
-    field_new.find('input').val( '' );
-    field_new.insertAfter( field );
+    field_new.find('input').val('');
+    field_new.removeClass('has-success has-error');
+    field_new.insertAfter(field);
   });
 
-  $( document ).on('click', '.btn-remove', function(e) {
+  // Remove extra form fields
+  $(document).on('click', '.btn-remove', function(e) {
     e.preventDefault();
     $(this).closest('.form-group').remove();
   });
