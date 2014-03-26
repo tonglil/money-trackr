@@ -698,8 +698,7 @@
             top: "0",
             left: "0",
             borderColor: "transparent",
-            boxShadow: "none",
-            display: "none"
+            boxShadow: "none"
         },
         input: {
             position: "relative",
@@ -1157,7 +1156,8 @@
                         var $el;
                         $el = $(html.suggestion).append(that.templates.suggestion(suggestion)).data(datasetKey, that.name).data(valueKey, that.displayFn(suggestion)).data(datumKey, suggestion);
                         $el.children().each(function() {
-                            $(this).css(css.suggestionChild);
+                            //$(this).css(css.suggestionChild);
+                            $(this).css(css.suggestionChild).addClass('needsclick');
                         });
                         return $el;
                     }

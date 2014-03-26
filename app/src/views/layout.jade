@@ -15,7 +15,7 @@ html
     // Customize home screen title
     meta(content=title name='apple-mobile-web-app-title')
     // Set viewport
-    meta(name='viewport' content='width=device-width initial-scale=1 maximum-scale=1 user-scalable=no target-densityDpi=device-dpi')
+    meta(name='viewport' content='width=device-width initial-scale=1 maximum-scale=1 user-scalable=no')
     link(rel='apple-touch-icon' href='/img/apple-touch-icon.png')
     link(rel='apple-touch-startup-image', href='/img/apple-touch-startup-image.png')
   body
@@ -33,8 +33,6 @@ html
                 img.profile-picture.img-circle.center-block(src='http://graph.facebook.com/' + auth.id + '/picture' alt='Profile Picture')
               hr
               ul.nav.nav-pills.nav-stacked
-                //-li.active
-                  //-a(href='#profile' data-toggle="pill") Profile
                 li.active
                   a(href='#list' data-toggle="pill") Current Tabs
                 li
