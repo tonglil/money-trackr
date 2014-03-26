@@ -1,12 +1,22 @@
 var middlewares = {};
 
 middlewares.Auth = {
-  authenticate: function(req, res, next) {
+  auth: function(req, res, next) {
     if (req.isAuthenticated()) {
       next();
     } else {
       req.flash('error', 'You need to be logged in to do that!');
       res.redirect('/login');
+    }
+  },
+
+  authApi: function(req, res, next) {
+    if (req.isAuthenticated()) {
+      next();
+    } else {
+      res.json(401, {
+        error: 'You need to be logged in to do that!'
+      });
     }
   },
 

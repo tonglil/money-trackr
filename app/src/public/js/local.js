@@ -3,6 +3,140 @@ $(document).ready(function () {
     $('.row-offcanvas').toggleClass('active');
   });
 
+  Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+  };
+  Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+  };
+  Storage.prototype.setObjectTime = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+    this.setItem(key + '_t', Date.now());
+  };
+  Storage.prototype.getObjectTime = function(key) {
+    var value = [];
+    value[0] = JSON.parse(this.getItem(key));
+    value[1] = new Date(+this.getItem(key + '_t'));
+    return value;
+  };
+
+  var ls = localStorage;
+
+  var data = null;
+  //var data = ['Tony Li', 'Colin Shi', 'Byron Duenas', 'Hamza Faran'];
+  var key = 'friends';
+  //ls.setObjectTime('friends', data);
+  //var friends = ls.getObject(key);
+  //var friends;
+  var min = 5;
+
+  /*
+   *if (!friends) {
+   *  console.log('friends is empty, should make a request to get them');
+   *  console.log(friends);
+   *  loadLocalStorage(key);
+   *  friends = ls.getObjectTime(key);
+   *  console.log('friends gotten and set');
+   *  console.log(friends);
+   *  console.log(localStorageSpace());
+   *} else {
+   *  console.log('friends are loaded');
+   *  console.log(friends);
+   *  reloadLocalStorage(key, min*60000);
+   *  console.log(localStorageSpace());
+   *}
+   */
+
+  var friends;
+
+  function nameInputTA(element) {
+    var nameTA = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      limit: 10,
+      prefetch: {
+        url: '/sync/friends',
+        filter: function(list) {
+          friends = $.parseJSON(list);
+          return $.map(friends, function(person) {
+            return {
+              name: person.name,
+              id: person.id
+            };
+          });
+        }
+      }
+    });
+    nameTA.initialize();
+    element.typeahead(null, {
+      displayKey: 'name',
+      // `ttAdapter` wraps the suggestion engine in an adapter that is compatible with the typeahead jQuery plugin
+      source: nameTA.ttAdapter()
+    }).on('typeahead:opened', function() {
+      $('.tt-dropdown-menu').css('width', $(this).width() + 'px');
+    });
+  }
+
+  nameInputTA($('.typeahead'));
+  debounceInput();
+
+
+
+
+
+
+
+  /*
+   *@param:   key       the local storage key
+   *@param:   url       a request url to override '/sync'
+   */
+  function loadLocalStorage(key, url) {
+    var req = '/sync';
+    if (url) req = url;
+
+    $.ajax({
+      type: 'GET',
+      url: req,
+      data: {
+        key: key
+      }
+    }).success(function(data) {
+      ls.setObjectTime(key, data);
+    });
+  }
+
+  /*
+   *@param: key       the local storage key
+   *@param: refresh   the time in milliseconds for the existing key to expire
+   */
+  function reloadLocalStorage(key, refresh) {
+    var value = ls.getObjectTime(key);
+    var object = value[0];
+    var cachePrev = value[1];
+    var cacheLimit = new Date(cachePrev.getTime() + refresh);
+    var now = new Date();
+    if (now > cacheLimit) {
+      console.log('refresh object from server');
+      loadLocalStorage(key);
+    }
+  }
+
+  function localStorageSpace() {
+    var allStrings = '';
+    for (var key in window.localStorage) {
+      if (window.localStorage.hasOwnProperty(key)) {
+        allStrings += window.localStorage[key];
+      }
+    }
+    return allStrings ? 3 + ((allStrings.length*16)/(8*1024)) + ' KB' : 'Empty (0 KB)';
+  }
+
+  window.setTimeout(function() {
+    $('.alert-info').addClass('fade');
+    $(".alert").alert('close');
+  }, 3000);
+
   $('#new-btn').click(function() {
     $('#sidebar').find('li.active').removeClass('active');
     $('#sidebar').find('a[href="#new"]').parent().addClass('active');
@@ -131,21 +265,43 @@ $(document).ready(function () {
   $('.panel-heading span.panel-clickable').click();
   $('.panel div.panel-clickable').click();
 
-  // Add extra form fields
+  function nameFirst() {
+    var el = document.createElement('div');
+    el.setAttribute('class', 'form-group input-group');
+    el.innerHTML = '<input id="0" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off" class="typeahead"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    $('input#reset').parent().html(el);
+  }
+  nameFirst();
+
+  // Add extra name input form fields
   $(document).on('click', '.btn-add', function(e) {
     e.preventDefault();
+    debounceInput();
+
     var field = $(this).closest('.form-group');
-    var field_new = field.clone();
+    var id = field.find('input').filter(function() {
+      return this.id.match(/[0-9]+/)
+    }).attr('id');
+    var el = document.createElement('div');
+    id++;
+    el.setAttribute('class', 'form-group input-group');
+    el.innerHTML = '<input id="' + id + '" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off" class="typeahead"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    $(el).insertAfter(field);
     $(this)
     .toggleClass('btn-default')
     .toggleClass('btn-add')
     .toggleClass('btn-warning')
     .toggleClass('btn-remove')
     .html('–');
-    field_new.find('input').val('');
-    field_new.removeClass('has-success has-error');
-    field_new.insertAfter(field);
   });
+
+  function debounceInput() {
+    $('#new-tab').one('DOMNodeInserted', function(e) {
+      var temp = $(this).find('.typeahead').last();
+      nameInputTA(temp.closest('.typeahead'));
+      return false;
+    });
+  }
 
   // Remove extra form fields
   $(document).on('click', '.btn-remove', function(e) {

@@ -74,7 +74,10 @@ module.exports = function(passport) {
           return done(err);
         });
       } else {
-        doFacebook(facebook);
+        facebook.token = accessToken;
+        facebook.save().success(function(facebook) {
+          doFacebook(facebook);
+        });
       }
     }).error(function(err) {
       done(err);

@@ -27,7 +27,7 @@ var paths = {
 };
 
 gulp.task('default', ['clean'], function() {
-  gulp.start('src', 'js', 'css', 'img', 'fonts');
+  gulp.start('src', 'js', 'css', 'img', 'fonts', 'watch');
 });
 
 gulp.task('clean', function() {
