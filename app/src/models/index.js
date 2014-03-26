@@ -6,7 +6,7 @@ var Sequelize = require('sequelize');
 var env = require('../config').env;
 var config = require('../config').database;
 
-var db = new Sequelize(config.name, config[env].username, config[env].password, config.options);
+var db = new Sequelize(config.name, config.username, config.password, config[env]);
 
 var data = {};
 

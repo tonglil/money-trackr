@@ -12,3 +12,7 @@ An Android app to keep track of IOUs between friends
 ## Server
 * Install [nodemon](https://github.com/remy/nodemon)
 * `nodemon app/src/money-tracker.js`
+
+## Credentials
+* `cp ./app/password-template.js ./app/src/config/passport.js`
+* Input valid values
