@@ -1,0 +1,46 @@
+doctype html
+html
+  head
+    if title
+      title= title + ' - ' + 'Money Trackr'
+    else
+      title= 'Money Trackr'
+    link(rel='stylesheet' href='/css/bootstrap.min.css')
+    link(rel='stylesheet' href='/css/lumen.min.css')
+    link(rel='stylesheet' href='/css/local.min.css')
+    // Run in full-screen mode
+    meta(content='yes' name='apple-mobile-web-app-capable')
+    // Make the status bar solid
+    meta(content='black' name='apple-mobile-web-app-status-bar-style')
+    // Customize home screen title
+    meta(content=title name='apple-mobile-web-app-title')
+    // Set viewport
+    meta(name='viewport' content='width=device-width initial-scale=1 maximum-scale=1 user-scalable=no')
+    link(rel='apple-touch-icon' href='/img/apple-touch-icon.png')
+    link(rel='apple-touch-startup-image', href='/img/apple-touch-startup-image.png')
+  body
+    include includes/nav
+    include includes/flash
+    .container.full
+      .row.row-offcanvas.row-offcanvas-right
+        .col-xs-12.col-sm-9
+          block content
+        // /span
+        if (user)
+          #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
+            .well
+              if (auth)
+                img.profile-picture.img-circle.center-block(src='http://graph.facebook.com/' + auth.id + '/picture' alt='Profile Picture')
+              hr
+              ul.nav.nav-pills.nav-stacked
+                li.active
+                  a(href='#list' data-toggle="pill") Current Tabs
+                li
+                  a(href='#new' data-toggle="pill") New Tab
+                li
+                  a(href='#pay' data-toggle="pill") Pay A Tab
+                li
+                  a#logout(href='/logout') Log out
+          // /span
+      // /row
+    include includes/footer

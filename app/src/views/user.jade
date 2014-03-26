@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  .tab-content
+    // Current tabs
+    #list.tab-pane.active
+      include current-tabs
+    // New tab
+    #new.tab-pane
+      include new-tab
+    #pay.tab-pane.fade
+      img.img-responsive(src='//placehold.it/600x400&text=new')
+
+append script
