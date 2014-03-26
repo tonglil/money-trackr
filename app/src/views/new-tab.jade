@@ -6,10 +6,17 @@ form#new-tab(method='post' action='/tab/new')
   .form-group
     input#amount.form-control(type='number' name='amount' autofocus data-toggle='tooltip' data-placement='top' title='required; must be a number')
 
+  //-label Name 
+    //-small (multiple names implies an even split)
+  //-.form-group.input-group
+    //-input.typeahead.form-control(type='text' name='names[]' data-provide='typeahead' data-toggle='tooltip' data-placement='top' title='required' autocomplete='off' autocorrect='off' autocapitalize='off')
+    //-span.input-group-btn
+      //-button.btn.btn-default.btn-add(type='button') +
+
   label Name 
     small (multiple names implies an even split)
-  .form-group.input-group
-    input.name.form-control(type='text' name='names[]' data-toggle='tooltip' data-placement='top' title='required')
+  #names
+    input#reset
     span.input-group-btn
       button.btn.btn-default.btn-add(type='button') +
 
@@ -27,6 +34,7 @@ form#new-tab(method='post' action='/tab/new')
 
   hr
 
+  // Possible to have a tax field as well
   .form-group
     button#addTip.btn.btn-default.btn-block(type='button' name='addTip' value='false')
       span.glyphicon.glyphicon-thumbs-up.glyphicon-pad-right
@@ -64,7 +72,3 @@ form#new-tab(method='post' action='/tab/new')
   .text-center
     input.btn.btn-info.btn-big(type='submit' value='Add Tab')
     //-a#new-tab-submit.btn.btn-info.btn-big(href="#new" data-toggle="pill") Add
-
-hr
-
-#errors

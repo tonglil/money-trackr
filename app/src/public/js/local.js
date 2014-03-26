@@ -3,6 +3,8 @@ $(document).ready(function () {
     $('.row-offcanvas').toggleClass('active');
   });
 
+  // Local storage helpers
+  var ls = localStorage;
   Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
   };
@@ -20,8 +22,6 @@ $(document).ready(function () {
     value[1] = new Date(+this.getItem(key + '_t'));
     return value;
   };
-
-  var ls = localStorage;
 
   var data = null;
   //var data = ['Tony Li', 'Colin Shi', 'Byron Duenas', 'Hamza Faran'];
@@ -47,45 +47,6 @@ $(document).ready(function () {
    *  console.log(localStorageSpace());
    *}
    */
-
-  var friends;
-
-  function nameInputTA(element) {
-    var nameTA = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      limit: 10,
-      prefetch: {
-        url: '/sync/friends',
-        filter: function(list) {
-          friends = $.parseJSON(list);
-          return $.map(friends, function(person) {
-            return {
-              name: person.name,
-              id: person.id
-            };
-          });
-        }
-      }
-    });
-    nameTA.initialize();
-    element.typeahead(null, {
-      displayKey: 'name',
-      // `ttAdapter` wraps the suggestion engine in an adapter that is compatible with the typeahead jQuery plugin
-      source: nameTA.ttAdapter()
-    }).on('typeahead:opened', function() {
-      $('.tt-dropdown-menu').css('width', $(this).width() + 'px');
-    });
-  }
-
-  nameInputTA($('.typeahead'));
-  debounceInput();
-
-
-
-
-
-
 
   /*
    *@param:   key       the local storage key
@@ -132,9 +93,17 @@ $(document).ready(function () {
     return allStrings ? 3 + ((allStrings.length*16)/(8*1024)) + ' KB' : 'Empty (0 KB)';
   }
 
+
+
+
+
+
+
+
+
   window.setTimeout(function() {
     $('.alert-info').addClass('fade');
-    $(".alert").alert('close');
+    $(".alert-info").alert('close');
   }, 3000);
 
   $('#new-btn').click(function() {
@@ -229,7 +198,7 @@ $(document).ready(function () {
       _amount.focus().parent().addClass('has-error');
       return e.preventDefault();
     } else {
-      var _names = $('input.name');
+      var _names = $('input.name.tt-input');
       _names.each(function() {
         var _name = $(this);
         var name = _name.val().trim();
@@ -265,28 +234,33 @@ $(document).ready(function () {
   $('.panel-heading span.panel-clickable').click();
   $('.panel div.panel-clickable').click();
 
-  function nameFirst() {
-    var el = document.createElement('div');
-    el.setAttribute('class', 'form-group input-group');
-    el.innerHTML = '<input id="0" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off" class="typeahead"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
-    $('input#reset').parent().html(el);
-  }
-  nameFirst();
+  // Remove extra form fields
+  $(document).on('click', '.btn-remove', function(e) {
+    e.preventDefault();
+    $(this).closest('.form-group').remove();
+  });
 
   // Add extra name input form fields
   $(document).on('click', '.btn-add', function(e) {
     e.preventDefault();
-    debounceInput();
+
+    delegateInputTypeahead();
 
     var field = $(this).closest('.form-group');
     var id = field.find('input').filter(function() {
-      return this.id.match(/[0-9]+/)
+      return this.id.match(/[0-9]+/);
     }).attr('id');
-    var el = document.createElement('div');
     id++;
-    el.setAttribute('class', 'form-group input-group');
-    el.innerHTML = '<input id="' + id + '" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off" class="typeahead"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    var el = nameElement(id);
     $(el).insertAfter(field);
+    if (id == 1) {
+      //console.log($(el).children('pre').slice(0,5).remove());
+      //console.log($(el).children('.tt-input.tt-hint').remove());
+      $('input#1').parent().remove();
+      el = nameElement(1);
+      delegateInputTypeahead();
+      $(el).insertAfter(field);
+    }
     $(this)
     .toggleClass('btn-default')
     .toggleClass('btn-add')
@@ -295,23 +269,62 @@ $(document).ready(function () {
     .html('–');
   });
 
-  function debounceInput() {
-    $('#new-tab').one('DOMNodeInserted', function(e) {
-      var temp = $(this).find('.typeahead').last();
-      nameInputTA(temp.closest('.typeahead'));
-      return false;
+  delegateInputTypeahead();
+  nameFirst();
+
+  function nameInputTA(element) {
+    var nameTA = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      limit: 10,
+      prefetch: {
+        url: '/sync/friends',
+        filter: function(list) {
+          var friends = $.parseJSON(list);
+          return $.map(friends, function(person) {
+            return {
+              name: person.name,
+              id: person.id
+            };
+          });
+        }
+      }
+    });
+    nameTA.initialize();
+    element.typeahead(null, {
+      displayKey: 'name',
+      // `ttAdapter` wraps the suggestion engine in an adapter that is compatible with the typeahead jQuery plugin
+      source: nameTA.ttAdapter()
+    }).on('typeahead:opened', function() {
+      $('.tt-dropdown-menu').css('width', '100%');
     });
   }
 
-  // Remove extra form fields
-  $(document).on('click', '.btn-remove', function(e) {
-    e.preventDefault();
-    $(this).closest('.form-group').remove();
-  });
+  function nameElement(id) {
+    var el = document.createElement('div');
+    el.setAttribute('class', 'form-group input-group');
+    el.innerHTML = '<input id="' + id + '" class="typeahead form-control name" data-provide="typeahead" data-items="5" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    return el;
+  }
+
+  function nameFirst() {
+    var el = nameElement(0);
+    $('input#reset').parent().html(el);
+    delegateInputTypeahead();
+  }
+
+  function delegateInputTypeahead() {
+    $('#new-tab').one('DOMNodeInserted', function(e) {
+      var el = $(e.target);
+      nameInputTA(el.children('input'));
+    });
+  }
 
   // For iOS Apps
   // Open all links in the iOS web app
   if (('standalone' in window.navigator) && window.navigator.standalone) {
+    FastClick.attach(document.body);
+
     $('a').on('click', function(e){
       e.preventDefault();
       var new_location = $(this).attr('href');
@@ -321,12 +334,7 @@ $(document).ready(function () {
     });
   }
 
-  // For iOS Apps
-  if (window.navigator.standalone) {
-    FastClick.attach(document.body);
-  }
-
-  // Fix Facebook auth redirect url
+  // Fix Facebook auth callback url
   if (window.location.hash && window.location.hash == '#_=_') {
     if (window.history && history.pushState) {
       window.history.replaceState('', document.title, window.location.pathname);
@@ -342,4 +350,62 @@ $(document).ready(function () {
       document.body.scrollLeft = scroll.left;
     }
   }
+});
+
+// Alternative typeahead implementation
+$(document).ready(function () {
+/*
+ *  var key = 'name';
+ *  var numbers = new Bloodhound({
+ *    datumTokenizer: Bloodhound.tokenizers.obj.whitespace(key),
+ *    queryTokenizer: Bloodhound.tokenizers.whitespace,
+ *    limit: 10,
+ *    prefetch: {
+ *      url: '/sync/friends',
+ *      //ttl: 1,
+ *      filter: function(data) {
+ *        friends = $.parseJSON(data);
+ *        return $.map(friends, function(person) {
+ *          return {
+ *            name: person.name,
+ *            id: person.id
+ *          };
+ *        });
+ *      }
+ *    }
+ *    //local: $.map(states, function(state) { return { name: state }; })
+ *  });
+ *  numbers.initialize();
+ *
+ *  $('.typeahead').typeahead({
+ *    items: 5,
+ *    updater: function (item) {
+ *      return item[key];
+ *    },
+ *    source: numbers.ttAdapter(),
+ *    matcher: function(item) {
+ *      if (item[key].toLowerCase().indexOf(this.query.trim().toLowerCase()) != -1) {
+ *          return true;
+ *      }
+ *    },
+ *    sorter: function(items) {
+ *      var beginswith = []
+ *        , caseSensitive = []
+ *        , caseInsensitive = []
+ *        , item;
+ *      while ((item = items.shift())) {
+ *        if (!item[key].toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+ *        else if (~item[key].indexOf(this.query)) caseSensitive.push(item);
+ *        else caseInsensitive.push(item);
+ *      }
+ *      return beginswith.concat(caseSensitive, caseInsensitive);
+ *    },
+ *    highlighter: function (item) {
+ *      var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+ *      return item[key].replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+ *        return '<strong>' + match + '</strong>';
+ *      });
+ *    },
+ *  });
+ */
 });

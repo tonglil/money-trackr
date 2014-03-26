@@ -1,1 +1,2 @@
-./src/public/js/bs-*.js
+./src/public/js/*.js
+!./src/public/js/local.js

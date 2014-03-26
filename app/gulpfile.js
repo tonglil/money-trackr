@@ -17,7 +17,8 @@ var paths = {
     '!./src/dist/**/*.js'
   ],
   js: [
-    './src/public/js/*.js',
+    //'./src/public/js/*.js',
+    './src/public/js/local.js',
     '!./src/public/js/jquery*.js',
     '!./src/public/js/bootstrap.js'
   ],
@@ -27,6 +28,10 @@ var paths = {
 };
 
 gulp.task('default', ['clean'], function() {
+  gulp.start('src', 'js', 'css', 'img', 'fonts', 'watch');
+});
+
+gulp.task('max', function() {
   gulp.start('src', 'js', 'css', 'img', 'fonts', 'watch');
 });
 
