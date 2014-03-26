@@ -698,7 +698,8 @@
             top: "0",
             left: "0",
             borderColor: "transparent",
-            boxShadow: "none"
+            boxShadow: "none",
+            display: "none"
         },
         input: {
             position: "relative",

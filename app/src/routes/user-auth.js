@@ -32,15 +32,18 @@ module.exports = function(app, passport) {
         } else {
           req.flash('info', 'Welcome back, ' + req.user.firstName + '.');
         }
+
         //return res.redirect('/');
         res.redirect('/');
 
         req.user.getAuthProvider().success(function(provider) {
-          var days = (provider.updatedAt - Date.now()) / (1000*60*60*24);
-          if (days > 1) {
+          var days = (new Date() - provider.updatedAt) / (1000*60*60*24);
+          //if (days > 1) {
+          if (days > 0) {
             graph.setAccessToken(provider.token);
             graph.get('me/friends', function(err, friends) {
-              var serialized = JSON.stringify(friends);
+              if (err) return;
+              var serialized = JSON.stringify(friends.data);
               provider.friends = serialized;
               provider.save().success(function() {
                 return;

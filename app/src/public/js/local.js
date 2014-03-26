@@ -48,45 +48,6 @@ $(document).ready(function () {
    *}
    */
 
-  var friends;
-
-  function nameInputTA(element) {
-    var nameTA = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      limit: 10,
-      prefetch: {
-        url: '/sync/friends',
-        filter: function(list) {
-          friends = $.parseJSON(list);
-          return $.map(friends, function(person) {
-            return {
-              name: person.name,
-              id: person.id
-            };
-          });
-        }
-      }
-    });
-    nameTA.initialize();
-    element.typeahead(null, {
-      displayKey: 'name',
-      // `ttAdapter` wraps the suggestion engine in an adapter that is compatible with the typeahead jQuery plugin
-      source: nameTA.ttAdapter()
-    }).on('typeahead:opened', function() {
-      $('.tt-dropdown-menu').css('width', $(this).width() + 'px');
-    });
-  }
-
-  nameInputTA($('.typeahead'));
-  debounceInput();
-
-
-
-
-
-
-
   /*
    *@param:   key       the local storage key
    *@param:   url       a request url to override '/sync'
@@ -131,6 +92,51 @@ $(document).ready(function () {
     }
     return allStrings ? 3 + ((allStrings.length*16)/(8*1024)) + ' KB' : 'Empty (0 KB)';
   }
+
+
+
+
+
+  var friends;
+
+  function nameInputTA(element) {
+    var nameTA = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      limit: 10,
+      prefetch: {
+        url: '/sync/friends',
+        filter: function(list) {
+          friends = $.parseJSON(list);
+          return $.map(friends, function(person) {
+            return {
+              name: person.name,
+              id: person.id
+            };
+          });
+        }
+      }
+    });
+    nameTA.initialize();
+    element.typeahead(null, {
+      displayKey: 'name',
+      // `ttAdapter` wraps the suggestion engine in an adapter that is compatible with the typeahead jQuery plugin
+      source: nameTA.ttAdapter()
+    }).on('typeahead:opened', function() {
+      $('.tt-dropdown-menu').css('width', '100%');
+      console.log('width:', $(this).width());
+    });
+  }
+
+  nameInputTA($('.typeahead'));
+  debounceInput();
+
+
+
+
+
+
+
 
   window.setTimeout(function() {
     $('.alert-info').addClass('fade');
@@ -265,10 +271,38 @@ $(document).ready(function () {
   $('.panel-heading span.panel-clickable').click();
   $('.panel div.panel-clickable').click();
 
-  function nameFirst() {
+  // Remove extra form fields
+  $(document).on('click', '.btn-remove', function(e) {
+    e.preventDefault();
+    $(this).closest('.form-group').remove();
+  });
+
+
+
+  $(document).on('click', '.tt-suggestion', function(e) {
+    console.log(e);
+    console.log($(this));
+    alert('clicked');
+  });
+
+  $(document).on('click', '.tt-dropdown-menu', function(e) {
+    console.log(e);
+    console.log($(this));
+    console.log($(this).children());
+    $(this).on('click', 'p', function(e) {
+      console.log('hi');
+    });
+  });
+
+  function nameElement(id) {
     var el = document.createElement('div');
     el.setAttribute('class', 'form-group input-group');
-    el.innerHTML = '<input id="0" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off" class="typeahead"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    el.innerHTML = '<input id="' + id + '" class="typeahead form-control" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    return el;
+  }
+
+  function nameFirst() {
+    var el = nameElement(0);
     $('input#reset').parent().html(el);
   }
   nameFirst();
@@ -280,12 +314,10 @@ $(document).ready(function () {
 
     var field = $(this).closest('.form-group');
     var id = field.find('input').filter(function() {
-      return this.id.match(/[0-9]+/)
+      return this.id.match(/[0-9]+/);
     }).attr('id');
-    var el = document.createElement('div');
     id++;
-    el.setAttribute('class', 'form-group input-group');
-    el.innerHTML = '<input id="' + id + '" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off" class="typeahead"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    var el = nameElement(id);
     $(el).insertAfter(field);
     $(this)
     .toggleClass('btn-default')
@@ -303,11 +335,8 @@ $(document).ready(function () {
     });
   }
 
-  // Remove extra form fields
-  $(document).on('click', '.btn-remove', function(e) {
-    e.preventDefault();
-    $(this).closest('.form-group').remove();
-  });
+
+
 
   // For iOS Apps
   // Open all links in the iOS web app
