@@ -2,7 +2,8 @@
  *Passport config
  */
 
-var auth = require('./auth');
+var env = require('./index').env;
+var auth = require('./index').passport;
 
 var User = require('../models').User;
 var AuthProvider = require('../models').AuthProvider;
@@ -46,9 +47,9 @@ module.exports = function(passport) {
   }));
 
   passport.use('facebook', new FacebookStrategy({
-    clientID        : auth.facebookAuth.clientID,
-    clientSecret    : auth.facebookAuth.clientSecret,
-    callbackURL     : auth.facebookAuth.callbackURL
+    clientID        : auth.facebook[env].clientID,
+    clientSecret    : auth.facebook[env].clientSecret,
+    callbackURL     : auth.facebook[env].callbackURL
   }, function(accessToken, refreshToken, profile, done) {
     console.log(profile);
     AuthProvider.find({

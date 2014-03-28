@@ -4,6 +4,7 @@
 
 var express = require('express');
 var path = require('path');
+var redis = require('connect-redis')(express);
 var passport = require('passport');
 var flash = require('connect-flash');
 
@@ -20,7 +21,14 @@ module.exports = function(app) {
     app.use(express.cookieParser());
     app.use(express.json());
     app.use(express.urlencoded());
-    app.use(express.cookieSession({ secret: 'we track money', cookie: { maxAge: 60*60*1000 } }));
+    //app.use(express.cookieSession({ secret: 'we track money', cookie: { maxAge: 60*60*1000, httpOnly: true } }));
+    app.use(express.session({
+      store: new redis({
+        host: 'localhost',
+        port: 6379
+      }),
+      secret: 'tracking money'
+    }));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(flash());

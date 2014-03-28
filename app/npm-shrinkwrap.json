@@ -10,6 +10,22 @@
       "version": "0.1.1",
       "from": "connect-flash@"
     },
+    "connect-redis": {
+      "version": "1.4.7",
+      "from": "connect-redis@1.4.7",
+      "resolved": "https://registry.npmjs.org/connect-redis/-/connect-redis-1.4.7.tgz",
+      "dependencies": {
+        "redis": {
+          "version": "0.10.1",
+          "from": "redis@0.10.x",
+          "resolved": "https://registry.npmjs.org/redis/-/redis-0.10.1.tgz"
+        },
+        "debug": {
+          "version": "0.7.4",
+          "from": "debug@*"
+        }
+      }
+    },
     "express": {
       "version": "3.5.0",
       "from": "express@3.5.x",
