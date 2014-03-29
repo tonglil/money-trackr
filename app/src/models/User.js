@@ -18,9 +18,8 @@ module.exports = function(DB, Type) {
     fbid: {
       type: Type.STRING,
       unique: true,
-      allowNull: false,
+      allowNull: true,
       validate: {
-        notNull: true,
         notEmpty: true
       }
     },

@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
     var tip = parseInt(body.tip, 10) || 0;
     var total = makeCurrency(parseFloat(body.total)) || null;
 
-    var names = body.names.filter(function(name) {
+    var names = body.names.map(function(name) {
       var n = validator.escape(validator.trim(name));
       if (n) return n;
     });
@@ -45,6 +45,7 @@ module.exports = function(app, passport) {
       var n = parseInt(id, 10);
       if (!isNaN(n)) return n;
     });
+    var partySize = ids.length;
 
     var description = validator.escape(validator.trim(body.description)) || null;
     var payment = validator.escape(validator.trim(body.payment)) || null;
@@ -56,7 +57,7 @@ module.exports = function(app, passport) {
       return next('form values are malformed (not a number)');
     }
 
-    if (null === (amount || total || names || ids) || names.length === 0 || ids.length === 0 || names.length != ids.length) {
+    if (null === (amount || total) || partySize === 0 || names.length != ids.length) {
       return next('form values are missing');
     }
 
@@ -73,62 +74,63 @@ module.exports = function(app, passport) {
      */
 
     ids.forEach(function(id, i) {
-      console.log(id, i, names[i]);
-      //check if that id belongs to user
-      //find or create user
-      //create tab
-      //associate tab
-      User.find({
-        where: {
-          fbid: id
-        }
-      }).success(function(friend) {
-        if (!friend) {
-          User.fill(id, names[i], function(err, friend) {
-            console.log('filled...', friend, err);
-            if (err) return next(err);
-            createTab(friend);
-          });
-        } else {
-          console.log(friend);
+      var name = names[i];
+      if (id === 0) {
+        //LOOK BY UUID FIRST after it being passed through form?!
+        User.fill(null, name, function(err, friend) {
+          if (err) return next(err);
           createTab(friend);
-        }
-      }).error(function(err) {
-        next(err);
-      });
+        });
+      } else {
+        User.find({
+          where: {
+            fbid: id
+          }
+        }).success(function(friend) {
+          if (!friend) {
+            User.fill(id, name, function(err, friend) {
+              if (err) return next(err);
+              createTab(friend);
+            });
+          } else {
+            createTab(friend);
+          }
+        }).error(function(err) {
+          next(err);
+        });
+      }
     });
 
     function createTab(friend) {
       console.log('got the owing party', friend.values);
-    }
+      friend.Tab = {
+        amount: amount,
+        split: partySize,
+        description: description,
+        date: date,
+        deadline: deadline,
+        tip: tip,
+        payment: payment,
+        total: total / partySize,
+        paid: false
+      };
 
-/*
- *    req.user.addFriend(tab).success(function() {
- *      console.log('added new tab!');
- *    });
- *
- *
- *
- *
- *    req.user.Tab{
- *      amount: amount,
- *      description: description,
- *      date: date,
- *      deadline: deadline,
- *      tip: tip,
- *      payment: payment,
- *      total: total,
- *      paid: false
- *    };
- *
- *    req.user.addFriend(re)
- */
+      req.user.addFriend(friend);
+    }
 
     function makeCurrency(num) {
       return (Math.round(num * 100) / 100).toFixed(2);
     }
 
-    res.redirect('/user/' + req.user.uuid);
+    var verb = ' added to ';
+    var last = '';
+    if (partySize > 1) {
+      verb = ' split between ';
+      if (partySize > 2) last = ',';
+      last += ' and ' + names.splice(-1);
+    }
+    req.flash('success', 'Tab for $' + total + verb + names.join(', ') + last + '!');
+    return res.redirect('/user/' + req.user.uuid);
   });
 
   require('./user-auth')(app, passport);

@@ -12,6 +12,13 @@ module.exports = function(DB, Type) {
         notEmpty: true
       }
     },
+    split: {
+      type: Type.INTEGER,
+      allowNull: true,
+      validate: {
+        notEmpty: true
+      }
+    },
     description: {
       type: Type.STRING,
       allowNull: true,
