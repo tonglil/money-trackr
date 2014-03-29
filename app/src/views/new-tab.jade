@@ -22,7 +22,7 @@ form#new-tab(method='post' action='/tab/new')
 
   label Description
   .form-group
-    input.form-control(type='text' name='description2')
+    input.form-control(type='text' name='description')
     //-textarea.form-control(rows='3' name='description')
 
   label Date
@@ -44,7 +44,7 @@ form#new-tab(method='post' action='/tab/new')
   .form-group.range.temp-hide
     input(id='tip' type='range' oninput='tipNum.value=value' value='0' max='50' min='0' name='tip')
     span.input-group-btn
-      #tipNum.btn.btn-default.btn-fake 15%
+      #tipNum.btn.btn-default.btn-fake 0%
 
   hr
 
