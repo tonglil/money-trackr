@@ -13,6 +13,7 @@ var data = {};
 var models = [
   'User',
   'AuthProvider',
+  'Tab',
 ];
 
 models.forEach(function(model) {

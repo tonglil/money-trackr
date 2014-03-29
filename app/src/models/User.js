@@ -9,7 +9,6 @@ module.exports = function(DB, Type) {
     uuid: {
       type: Type.STRING,
       primaryKey: true,
-      unique: true,
       allowNull: false,
       validate: {
         notNull: true,
@@ -40,13 +39,15 @@ module.exports = function(DB, Type) {
         notEmpty: true
       }
     },
+    registered: {
+      type: Type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     passwordSet: {
       type: Type.BOOLEAN,
+      allowNull: false,
       defaultValue: false,
-      //allowNull: false,
-      validate: {
-        //notNull: true,
-      }
     },
     firstName: {
       type: Type.STRING,
@@ -70,6 +71,10 @@ module.exports = function(DB, Type) {
       User.hasOne(models.AuthProvider, {
         as: 'AuthProvider'
       });
+      User.hasMany(models.User, {
+        as: 'Friends',
+        through: models.Tab
+      });
     },
     classMethods: {
       register: function(email, password, fname, lname, done) {
@@ -89,6 +94,7 @@ module.exports = function(DB, Type) {
               email: email,
               salt: salt,
               hash: hash,
+              registered: true,
               passwordSet: true,
               firstName: fname,
               lastName: lname
@@ -117,6 +123,7 @@ module.exports = function(DB, Type) {
             User.create({
               uuid: guid.v4(),
               email: provider.email,
+              registered: true,
               passwordSet: false,
               firstName: provider.firstName,
               lastName: provider.lastName

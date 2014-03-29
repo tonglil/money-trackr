@@ -2,7 +2,7 @@
   h2 New Tab
 
 form#new-tab(method='post' action='/tab/new')
-  label Amount owed $
+  label Amount Owing ($)
   .form-group
     input#amount.form-control(autofocus type='number' name='amount' data-toggle='tooltip' data-placement='top' title='required; must be a number')
 
@@ -22,7 +22,8 @@ form#new-tab(method='post' action='/tab/new')
 
   label Description
   .form-group
-    textarea.form-control(rows='3' name='description')
+    input.form-control(type='text' name='description2')
+    //-textarea.form-control(rows='3' name='description')
 
   label Date
   .form-group
@@ -41,24 +42,24 @@ form#new-tab(method='post' action='/tab/new')
       | Add Tip (%)
 
   .form-group.range.temp-hide
-    input(id='tip' type='range' oninput='tipNum.value=value' value='15' max='50' min='0' name='tip')
+    input(id='tip' type='range' oninput='tipNum.value=value' value='0' max='50' min='0' name='tip')
     span.input-group-btn
       #tipNum.btn.btn-default.btn-fake 15%
 
   hr
 
-  label Paid with
+  label Paid Using
   .form-group
     select.form-control(name='payment')
+      option(value='other') Other
       option(value='cash') Cash
       option(value='credit') Credit
       option(value='debit') Debit
-      option(value='other') Other
 
   // Possible save receipt for proof
-  label Upload receipt
-  .form-group.text-center
-    input.text-center.btn.btn-default.btn-block(type='file' name='receipt')
+  //-label Upload receipt
+  //-.form-group.text-center
+    //-input.text-center.btn.btn-default.btn-block(type='file' name='receipt')
 
   hr
 

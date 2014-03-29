@@ -262,6 +262,10 @@ footer .container p {
     margin: 0;
     padding: 3px 20px;
 }
+.profile-picture-tt {
+    margin-right: 8px;
+    width: 32px;
+}
 /*
  *.twitter-typeahead {
  *    width: 100%;

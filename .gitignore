@@ -15,5 +15,6 @@ build
 node_modules/
 .nodemonignore
 
+ignore
 dist
 passwords.js

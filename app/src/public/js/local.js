@@ -3,104 +3,6 @@ $(document).ready(function () {
     $('.row-offcanvas').toggleClass('active');
   });
 
-  // Local storage helpers
-  var ls = localStorage;
-  Storage.prototype.setObject = function(key, value) {
-    this.setItem(key, JSON.stringify(value));
-  };
-  Storage.prototype.getObject = function(key) {
-    var value = this.getItem(key);
-    return value && JSON.parse(value);
-  };
-  Storage.prototype.setObjectTime = function(key, value) {
-    this.setItem(key, JSON.stringify(value));
-    this.setItem(key + '_t', Date.now());
-  };
-  Storage.prototype.getObjectTime = function(key) {
-    var value = [];
-    value[0] = JSON.parse(this.getItem(key));
-    value[1] = new Date(+this.getItem(key + '_t'));
-    return value;
-  };
-
-  var data = null;
-  //var data = ['Tony Li', 'Colin Shi', 'Byron Duenas', 'Hamza Faran'];
-  var key = 'friends';
-  //ls.setObjectTime('friends', data);
-  //var friends = ls.getObject(key);
-  //var friends;
-  var min = 5;
-
-  /*
-   *if (!friends) {
-   *  console.log('friends is empty, should make a request to get them');
-   *  console.log(friends);
-   *  loadLocalStorage(key);
-   *  friends = ls.getObjectTime(key);
-   *  console.log('friends gotten and set');
-   *  console.log(friends);
-   *  console.log(localStorageSpace());
-   *} else {
-   *  console.log('friends are loaded');
-   *  console.log(friends);
-   *  reloadLocalStorage(key, min*60000);
-   *  console.log(localStorageSpace());
-   *}
-   */
-
-  /*
-   *@param:   key       the local storage key
-   *@param:   url       a request url to override '/sync'
-   */
-  function loadLocalStorage(key, url) {
-    var req = '/sync';
-    if (url) req = url;
-
-    $.ajax({
-      type: 'GET',
-      url: req,
-      data: {
-        key: key
-      }
-    }).success(function(data) {
-      ls.setObjectTime(key, data);
-    });
-  }
-
-  /*
-   *@param: key       the local storage key
-   *@param: refresh   the time in milliseconds for the existing key to expire
-   */
-  function reloadLocalStorage(key, refresh) {
-    var value = ls.getObjectTime(key);
-    var object = value[0];
-    var cachePrev = value[1];
-    var cacheLimit = new Date(cachePrev.getTime() + refresh);
-    var now = new Date();
-    if (now > cacheLimit) {
-      console.log('refresh object from server');
-      loadLocalStorage(key);
-    }
-  }
-
-  function localStorageSpace() {
-    var allStrings = '';
-    for (var key in window.localStorage) {
-      if (window.localStorage.hasOwnProperty(key)) {
-        allStrings += window.localStorage[key];
-      }
-    }
-    return allStrings ? 3 + ((allStrings.length*16)/(8*1024)) + ' KB' : 'Empty (0 KB)';
-  }
-
-
-
-
-
-
-
-
-
   window.setTimeout(function() {
     $('.alert-info').addClass('fade');
     $(".alert-info").alert('close');
@@ -293,10 +195,14 @@ $(document).ready(function () {
     nameTA.initialize();
     element.typeahead(null, {
       displayKey: 'name',
-      // `ttAdapter` wraps the suggestion engine in an adapter that is compatible with the typeahead jQuery plugin
-      source: nameTA.ttAdapter()
+      source: nameTA.ttAdapter(),
+      templates: {
+        suggestion: _.template('<p><img class="profile-picture-tt img-circle" src="http://graph.facebook.com/<%=id%>/picture"><%=name%></p>')
+      }
     }).on('typeahead:opened', function() {
       $('.tt-dropdown-menu').css('width', '100%');
+    }).on('typeahead:selected typeahead:autocompleted', function(e, datum) {
+      $('#name' + e.target.id).val(datum.id);
     });
   }
 
@@ -304,6 +210,7 @@ $(document).ready(function () {
     var el = document.createElement('div');
     el.setAttribute('class', 'form-group input-group');
     el.innerHTML = '<input id="' + id + '" class="typeahead form-control name" data-provide="typeahead" data-items="5" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    el.innerHTML += '<input id="name' + id + '" type="hidden" name="ids[]"/>';
     return el;
   }
 
@@ -316,7 +223,7 @@ $(document).ready(function () {
   function delegateInputTypeahead() {
     $('#new-tab').one('DOMNodeInserted', function(e) {
       var el = $(e.target);
-      nameInputTA(el.children('input'));
+      nameInputTA(el.children('input.typeahead'));
     });
   }
 
@@ -350,62 +257,4 @@ $(document).ready(function () {
       document.body.scrollLeft = scroll.left;
     }
   }
-});
-
-// Alternative typeahead implementation
-$(document).ready(function () {
-/*
- *  var key = 'name';
- *  var numbers = new Bloodhound({
- *    datumTokenizer: Bloodhound.tokenizers.obj.whitespace(key),
- *    queryTokenizer: Bloodhound.tokenizers.whitespace,
- *    limit: 10,
- *    prefetch: {
- *      url: '/sync/friends',
- *      //ttl: 1,
- *      filter: function(data) {
- *        friends = $.parseJSON(data);
- *        return $.map(friends, function(person) {
- *          return {
- *            name: person.name,
- *            id: person.id
- *          };
- *        });
- *      }
- *    }
- *    //local: $.map(states, function(state) { return { name: state }; })
- *  });
- *  numbers.initialize();
- *
- *  $('.typeahead').typeahead({
- *    items: 5,
- *    updater: function (item) {
- *      return item[key];
- *    },
- *    source: numbers.ttAdapter(),
- *    matcher: function(item) {
- *      if (item[key].toLowerCase().indexOf(this.query.trim().toLowerCase()) != -1) {
- *          return true;
- *      }
- *    },
- *    sorter: function(items) {
- *      var beginswith = []
- *        , caseSensitive = []
- *        , caseInsensitive = []
- *        , item;
- *      while ((item = items.shift())) {
- *        if (!item[key].toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
- *        else if (~item[key].indexOf(this.query)) caseSensitive.push(item);
- *        else caseInsensitive.push(item);
- *      }
- *      return beginswith.concat(caseSensitive, caseInsensitive);
- *    },
- *    highlighter: function (item) {
- *      var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
- *      return item[key].replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
- *        return '<strong>' + match + '</strong>';
- *      });
- *    },
- *  });
- */
 });

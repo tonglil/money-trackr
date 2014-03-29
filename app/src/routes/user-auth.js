@@ -33,13 +33,12 @@ module.exports = function(app, passport) {
           req.flash('info', 'Welcome back, ' + req.user.firstName + '.');
         }
 
-        //return res.redirect('/');
         res.redirect('/');
 
         req.user.getAuthProvider().success(function(provider) {
           var days = (new Date() - provider.updatedAt) / (1000*60*60*24);
-          //if (days > 1) {
-          if (days > 0) {
+          if (days > 1) {
+          //if (days > 0) {
             graph.setAccessToken(provider.token);
             graph.get('me/friends', function(err, friends) {
               if (err) return;

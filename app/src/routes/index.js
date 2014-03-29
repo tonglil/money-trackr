@@ -26,12 +26,12 @@ module.exports = function(app, passport) {
 
   app.get('/sync/:resource', Auth.authApi, function(req, res, next) {
     var resource = req.params.resource;
-    //var key = req.query.key;
     req.user.getAuthProvider().success(function(provider) {
-      //res.json(provider[key]);
       res.json(provider[resource]);
     });
   });
+
+  var Tab = require('../models').Tab;
 
   app.post('/tab/new', Auth.auth, function(req, res, next) {
     var body = req.body;
