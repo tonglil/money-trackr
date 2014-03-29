@@ -14,23 +14,18 @@ module.exports = function(app, passport) {
   });
 
   var Auth = require('../controllers/middlewares').Auth;
-  var graph = require('fbgraph');
 
   app.get('/user/:id', Auth.auth, function(req, res, next) {
-    req.user.getAuthProvider().success(function(provider) {
-      res.render('user', {
-        auth: provider.values
-      });
+    res.render('user', {
+      //pass back all of their tabs...
     });
   });
 
   app.get('/sync/:resource', Auth.authApi, function(req, res, next) {
-    var resource = req.params.resource;
-    req.user.getAuthProvider().success(function(provider) {
-      res.json(provider[resource]);
-    });
+    res.json(req.user[req.params.resource]);
   });
 
+  var User = require('../models').User;
   var Tab = require('../models').Tab;
   var validator = require('validator');
 
@@ -46,7 +41,7 @@ module.exports = function(app, passport) {
       var n = validator.escape(validator.trim(name));
       if (n) return n;
     });
-    var ids = body.ids.filter(function(id) {
+    var ids = body.ids.map(function(id) {
       var n = parseInt(id, 10);
       if (!isNaN(n)) return n;
     });
@@ -77,17 +72,35 @@ module.exports = function(app, passport) {
      *  total: '57.50' }
      */
 
-    ids.forEach(function(id) {
+    ids.forEach(function(id, i) {
+      console.log(id, i, names[i]);
       //check if that id belongs to user
       //find or create user
       //create tab
       //associate tab
-      /*
-       *AuthProvider.find({
-       *  id: id
-       *}).success(function)
-       */
+      User.find({
+        where: {
+          fbid: id
+        }
+      }).success(function(friend) {
+        if (!friend) {
+          User.fill(id, names[i], function(err, friend) {
+            console.log('filled...', friend, err);
+            if (err) return next(err);
+            createTab(friend);
+          });
+        } else {
+          console.log(friend);
+          createTab(friend);
+        }
+      }).error(function(err) {
+        next(err);
+      });
     });
+
+    function createTab(friend) {
+      console.log('got the owing party', friend.values);
+    }
 
 /*
  *    req.user.addFriend(tab).success(function() {

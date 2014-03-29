@@ -12,7 +12,7 @@ var data = {};
 
 var models = [
   'User',
-  'AuthProvider',
+  //'AuthProvider',
   'Tab',
 ];
 

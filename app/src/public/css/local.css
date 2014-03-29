@@ -223,6 +223,9 @@ footer .container p {
     margin-bottom: 15px;
     width: 100%;
 }
+.form-group.row {
+    margin: 0;
+}
 .glyphicon-pad-left {
     padding-left: 4px;
     vertical-align: sub;

@@ -36,7 +36,7 @@ form#new-tab(method='post' action='/tab/new')
   hr
 
   // Possible to have a tax field as well
-  .form-group
+  .form-group.row
     button#addTip.btn.btn-default.btn-block(type='button' name='addTip' value='false')
       span.glyphicon.glyphicon-thumbs-up.glyphicon-pad-right
       | Add Tip (%)
@@ -70,6 +70,6 @@ form#new-tab(method='post' action='/tab/new')
 
   hr
 
-  .text-center
+  .row.text-center
     input.btn.btn-info.btn-big(type='submit' value='Add Tab')
     //-a#new-tab-submit.btn.btn-info.btn-big(href="#new" data-toggle="pill") Add

@@ -40,14 +40,14 @@ $(document).ready(function () {
       el.val('false');
       el.removeClass();
       el.addClass('btn btn-block btn-default');
-      el.parent().next('.range').slideUp(0);
+      $('.range').slideUp(0);
       setTotal(false);
     } else {
       // Add tip
       el.val('true');
       el.removeClass();
       el.addClass('btn btn-block btn-success');
-      el.parent().next('.range').addClass('range-table').slideDown(0);
+      $('.range').addClass('range-table').slideDown(0);
       setTotal(true);
     }
   });
@@ -210,7 +210,7 @@ $(document).ready(function () {
     var el = document.createElement('div');
     el.setAttribute('class', 'form-group input-group');
     el.innerHTML = '<input id="' + id + '" class="typeahead form-control name" data-provide="typeahead" data-items="5" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
-    el.innerHTML += '<input id="name' + id + '" type="hidden" name="ids[]"/>';
+    el.innerHTML += '<input id="name' + id + '" type="hidden" name="ids[]" value="0"/>';
     return el;
   }
 

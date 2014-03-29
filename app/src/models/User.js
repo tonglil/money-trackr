@@ -15,28 +15,29 @@ module.exports = function(DB, Type) {
         notEmpty: true
       }
     },
-    email: {
+    fbid: {
       type: Type.STRING,
       unique: true,
       allowNull: false,
       validate: {
         notNull: true,
+        notEmpty: true
+      }
+    },
+    token: {
+      type: Type.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true
+      }
+    },
+    email: {
+      type: Type.STRING,
+      unique: true,
+      allowNull: true,
+      validate: {
         notEmpty: true,
         isEmail: true
-      }
-    },
-    salt: {
-      type: Type.STRING,
-      allowNull: true,
-      validate: {
-        notEmpty: true
-      }
-    },
-    hash: {
-      type: Type.STRING,
-      allowNull: true,
-      validate: {
-        notEmpty: true
       }
     },
     registered: {
@@ -44,114 +45,67 @@ module.exports = function(DB, Type) {
       allowNull: false,
       defaultValue: false,
     },
-    passwordSet: {
-      type: Type.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     firstName: {
       type: Type.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true,
-        notEmpty: true
-      }
+      //allowNull: false,
+      //validate: {
+        //notNull: true,
+        //notEmpty: true
+      //}
     },
     lastName: {
       type: Type.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true,
-        notEmpty: true
-      }
-    }
+      //allowNull: false,
+      //validate: {
+        //notNull: true,
+        //notEmpty: true
+      //}
+    },
+    friends: {
+      type: Type.TEXT,
+    },
   }, {
     associate: function(models) {
-      //TODO: hasMany, differentiate between them (friendlists, picurls, etc)
-      User.hasOne(models.AuthProvider, {
-        as: 'AuthProvider'
-      });
       User.hasMany(models.User, {
         as: 'Friends',
         through: models.Tab
       });
     },
     classMethods: {
-      register: function(email, password, fname, lname, done) {
-        var hash = require('../controllers/hash');
-        var User = this;
-
-        hash(password, function(err, salt, hash) {
-          if (err) return done(err);
-          User.find({
-            where: {
-              email: email
-            }
-          }).success(function(user) {
-            if (user) return done('user already exists');
-            User.create({
-              uuid: guid.v4(),
-              email: email,
-              salt: salt,
-              hash: hash,
-              registered: true,
-              passwordSet: true,
-              firstName: fname,
-              lastName: lname
-            }).success(function(user) {
-              if (!user) return done('no user');
-              return done(null, user);
-            }).error(function(err) {
-              return done(err);
-            });
-          }).error(function(err) {
-            return done(err);
-          });
+      register: function(accessToken, profile, done) {
+        this.create({
+          uuid: guid.v4(),
+          fbid: profile.id,
+          token: accessToken,
+          email: profile.emails[0].value,
+          registered: true,
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          friends: null
+        }).success(function(user) {
+          return done(null, user);
+        }).error(function(err) {
+          return done(err);
         });
       },
-      fill: function(provider, done) {
-        var User = this;
-
-        User.find({
-          where: {
-            email: provider.email
-          }
+      fill: function(id, name, done) {
+        this.create({
+          uuid: guid.v4(),
+          fbid: id,
+          token: null,
+          email: null,
+          registered: false,
+          firstName: name,
+          lastName: null,
+          friends: null
         }).success(function(user) {
-          if (user) {
-            return done(null, user);
-          } else {
-            User.create({
-              uuid: guid.v4(),
-              email: provider.email,
-              registered: true,
-              passwordSet: false,
-              firstName: provider.firstName,
-              lastName: provider.lastName
-            }).success(function(user) {
-              if (!user) return done('no user');
-              else {
-                return done(null, user);
-              }
-            }).error(function(err) {
-              return done(err);
-            });
-          }
+          return done(null, user);
         }).error(function(err) {
           return done(err);
         });
       }
     },
     instanceMethods: {
-      verifyPassword: function(password, done) {
-        var hash = require('../controllers/hash');
-        var user = this;
-
-        hash(password, user.salt, function(err, hash) {
-          if (err) return done(err);
-          if (hash.toString('base64') == user.hash) return done(null, user);
-          return done('incorrect password', null);
-        });
-      }
     }
   });
 

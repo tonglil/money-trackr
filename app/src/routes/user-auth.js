@@ -35,21 +35,19 @@ module.exports = function(app, passport) {
 
         res.redirect('/');
 
-        req.user.getAuthProvider().success(function(provider) {
-          var days = (new Date() - provider.updatedAt) / (1000*60*60*24);
-          if (days > 1) {
-          //if (days > 0) {
-            graph.setAccessToken(provider.token);
-            graph.get('me/friends', function(err, friends) {
-              if (err) return;
-              var serialized = JSON.stringify(friends.data);
-              provider.friends = serialized;
-              provider.save().success(function() {
-                return;
-              });
+        var days = (new Date() - req.user.updatedAt) / (1000*60*60*24);
+        if (days > 1) {
+        //if (days > 0) {
+          graph.setAccessToken(req.user.token);
+          graph.get('me/friends', function(err, friends) {
+            if (err) return;
+            var serialized = JSON.stringify(friends.data);
+            req.user.friends = serialized;
+            req.user.save().success(function() {
+              return;
             });
-          }
-        });
+          });
+        }
       });
     })(req, res, next);
   });
