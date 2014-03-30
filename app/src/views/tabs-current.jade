@@ -1,36 +1,49 @@
-.page-header
-  h2 Current Tabs
-
+- var total = 0
 - friends.forEach(function(friend) {
-  .panel.panel-default
-    .panel-heading.panel-sm.panel-clickable
-      .center-out
-        - name = [friend.tabs[0].friend.firstName, friend.tabs[0].friend.lastName].reduce(function(res, val) {
-        -   return res + (val ? ' ' + val : '');
-        - });
-        if (friend.tabs[0].friend.fbid)
-          img.profile-picture.img-circle(src='http://graph.facebook.com/' + friend.tabs[0].friend.fbid + '/picture' alt=name)
-        else
-          img.profile-picture.img-circle(src='/default.jpg' alt=name)
-        span.name= name
-        .center-in.text-right
-          span.badge= friend.total
-    .panel-body.panel-sm.panel-table.panel-expand
-      table.table
-        thead
-          tr
-            th.date Date
-            th.reason Description
-            th.amount Amount
-        tbody
-          - friend.tabs.forEach(function(tab) {
-            tr
-              td.date
-                a(href='/tab/' + tab.id)= tab.date
-              td.reason= tab.description
-              td.amount= '$' + tab.owe
-          - })
+-   total += parseFloat(friend.total)
 - })
+
+.page-header
+  h2 Current Tabs 
+    small.lg= '(total outstanding: $' + total + ')'
+
+if friends.length > 0
+  each x, i in friends
+    if i % 2 === 0
+      .row
+        each friend in friends.slice(i, i+2)
+          .col-lg-6
+            .panel.panel-default
+              .panel-heading.panel-sm.panel-clickable
+                .center-out
+                  - name = [friend.tabs[0].friend.firstName, friend.tabs[0].friend.lastName].reduce(function(res, val) {
+                  -   return res + (val ? ' ' + val : '');
+                  - });
+                  if (friend.tabs[0].friend.fbid)
+                    img.profile-picture.img-circle(src='http://graph.facebook.com/' + friend.tabs[0].friend.fbid + '/picture' alt=name)
+                  else
+                    img.profile-picture.img-circle(src='/img/default.jpg' alt=name)
+                  span.name= name
+                  .center-in.text-right
+                    span.badge= '$' + friend.total
+              .panel-body.panel-sm.panel-table.panel-expand
+                table.table
+                  thead
+                    tr
+                      th.date Date
+                      th.reason Description
+                      th.amount Amount
+                  tbody
+                    - friend.tabs.forEach(function(tab) {
+                      tr
+                        td.date
+                          a(href='/tab/' + tab.id)= tab.date
+                        td.reason= tab.description
+                        td.amount= '$' + tab.owe
+                    - })
+else
+  .jumbotron
+    h1 All tidied up!
 
 .row.text-center
   a#new-btn.btn.btn-info.btn-big(href="#new" data-toggle="pill") + New Tab

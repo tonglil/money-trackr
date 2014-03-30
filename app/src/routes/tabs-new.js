@@ -62,7 +62,7 @@ module.exports = function(app) {
         //LOOK BY UUID FIRST after it being passed through form?!
         User.fill(null, name, function(err, friend) {
           if (err) return next(err);
-          createTab(friend);
+          createTab(friend, callback);
         });
       } else {
         User.find({

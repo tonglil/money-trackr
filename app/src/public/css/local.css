@@ -95,6 +95,14 @@ footer .container p {
     font-size: 36px;
     padding: 0 24px;
 }
+small.lg {
+    display: block;
+}
+@media (min-width: 768px) {
+    small.lg {
+        display: inline;
+    }
+}
 
 /*
  *Login

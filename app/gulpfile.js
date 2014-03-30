@@ -27,11 +27,11 @@ var paths = {
   fonts: './src/public/fonts/*'
 };
 
-gulp.task('default', ['clean'], function() {
+gulp.task('default', function() {
   gulp.start('src', 'js', 'css', 'img', 'fonts', 'watch');
 });
 
-gulp.task('max', function() {
+gulp.task('reset', ['clean'], function() {
   gulp.start('src', 'js', 'css', 'img', 'fonts', 'watch');
 });
 
@@ -50,6 +50,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.fonts, ['fonts']);
 });
 
+//TODO: NOT USED ATM
 gulp.task('dev', function() {
   nodemon({
     script: './src/money-trackr.js',
