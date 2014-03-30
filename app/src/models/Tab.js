@@ -65,12 +65,32 @@ module.exports = function(DB, Type) {
         notEmpty: true
       }
     },
+    owe: {
+      type: Type.DECIMAL(12, 2),
+      allowNull: false,
+      validate: {
+        notNull: true,
+        notEmpty: true
+      }
+    },
     paid: {
       type: Type.BOOLEAN,
       allowNull: false,
       defaultValue: false
+    },
+    userId: {
+      type: Type.UUID,
+      references: 'Users',
+      referencesKey: 'uuid'
+    },
+    friendId: {
+      type: Type.UUID,
+      references: 'Users',
+      referencesKey: 'uuid'
     }
   }, {
+    associate: function(models) {
+    },
     classMethods: {
     },
     instanceMethods: {

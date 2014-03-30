@@ -15,6 +15,11 @@ module.exports = function(app, passport) {
 
   var Auth = require('../controllers/middlewares').Auth;
 
+  var Tab = require('../models').Tab;
+  var User = require('../models').User;
+  var async = require('async');
+  var _ = require('../models').Sequelize.Utils._;
+
   app.get('/user/:id', Auth.auth, function(req, res, next) {
     res.render('user', {
       //pass back all of their tabs...
@@ -61,6 +66,11 @@ module.exports = function(app, passport) {
       return next('form values are missing');
     }
 
+    //TODO: more name and id validations:
+    //- name must match id based on friend list
+    //- name must exist in friend list if id != 0
+    //- if id === 0 user can exist in custom list, then new user
+
     /*
      *{ amount: '50',
      *  names: [ 'Josh Compagnyolo', 'Aneel Mawji' ],
@@ -102,8 +112,7 @@ module.exports = function(app, passport) {
     });
 
     function createTab(friend) {
-      console.log('got the owing party', friend.values);
-      friend.Tab = {
+      Tab.create({
         amount: amount,
         split: partySize,
         description: description,
@@ -111,11 +120,13 @@ module.exports = function(app, passport) {
         deadline: deadline,
         tip: tip,
         payment: payment,
-        total: total / partySize,
+        total: total,
+        owe: makeCurrency(total / partySize),
         paid: false
-      };
-
-      req.user.addFriend(friend);
+      }).success(function(tab) {
+        req.user.addTab(tab);
+        friend.addDue(tab);
+      });
     }
 
     function makeCurrency(num) {

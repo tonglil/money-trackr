@@ -7,7 +7,7 @@ var guid = require('node-uuid');
 module.exports = function(DB, Type) {
   var User = DB.define('User', {
     uuid: {
-      type: Type.STRING,
+      type: Type.UUID,
       primaryKey: true,
       allowNull: false,
       validate: {
@@ -40,6 +40,7 @@ module.exports = function(DB, Type) {
       }
     },
     registered: {
+      //TODO: can infer this field from email or another field
       type: Type.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -65,9 +66,13 @@ module.exports = function(DB, Type) {
     },
   }, {
     associate: function(models) {
-      User.hasMany(models.User, {
-        as: 'Friends',
-        through: models.Tab
+      User.hasMany(models.Tab, {
+        as: 'Tabs',
+        foreignKey: 'userId'
+      });
+      User.hasMany(models.Tab, {
+        as: 'Dues',
+        foreignKey: 'friendId'
       });
     },
     classMethods: {
