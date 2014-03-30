@@ -78,7 +78,7 @@ module.exports = function(DB, Type) {
       allowNull: false,
       defaultValue: false
     },
-    userId: {
+    ownerId: {
       type: Type.UUID,
       references: 'Users',
       referencesKey: 'uuid'
@@ -90,6 +90,14 @@ module.exports = function(DB, Type) {
     }
   }, {
     associate: function(models) {
+      Tab.belongsTo(models.User, {
+        as: 'Owner',
+        foreignKey: 'ownerId'
+      });
+      Tab.belongsTo(models.User, {
+        as: 'Friend',
+        foreignKey: 'friendId'
+      });
     },
     classMethods: {
     },

@@ -68,7 +68,7 @@ module.exports = function(DB, Type) {
     associate: function(models) {
       User.hasMany(models.Tab, {
         as: 'Tabs',
-        foreignKey: 'userId'
+        foreignKey: 'ownerId'
       });
       User.hasMany(models.Tab, {
         as: 'Dues',
