@@ -10,7 +10,7 @@ var _ = require('../models').Sequelize.Utils._;
 var moment = require('moment');
 
 module.exports = function(app) {
-  app.get('/user/:id', Auth.auth, function(req, res, next) {
+  app.get('/user', Auth.auth, function(req, res, next) {
     User.find({
       where: {
         uuid: req.user.uuid

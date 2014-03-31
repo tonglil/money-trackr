@@ -24,15 +24,16 @@ var paths = {
   ],
   css: './src/public/css/*.css',
   img: './src/public/img/*',
-  fonts: './src/public/fonts/*'
+  fonts: './src/public/fonts/*',
+  static: './src/public/*'
 };
 
 gulp.task('default', function() {
-  gulp.start('src', 'js', 'css', 'img', 'fonts', 'watch');
+  return gulp.start('src', 'js', 'css', 'img', 'static', 'watch');
 });
 
 gulp.task('reset', ['clean'], function() {
-  gulp.start('src', 'js', 'css', 'img', 'fonts', 'watch');
+  return gulp.start('src', 'js', 'css', 'img', 'static', 'watch');
 });
 
 gulp.task('clean', function() {
@@ -47,7 +48,8 @@ gulp.task('watch', function() {
   gulp.watch(paths.js, ['js']);
   gulp.watch(paths.css, ['css']);
   gulp.watch(paths.img, ['img']);
-  gulp.watch(paths.fonts, ['fonts']);
+  gulp.watch(paths.fonts, ['static']);
+  gulp.watch(paths.static, ['static']);
 });
 
 //TODO: NOT USED ATM
@@ -107,8 +109,10 @@ gulp.task('img', function() {
   .pipe(gulp.dest('./src/dist/img/'));
 });
 
-gulp.task('fonts', function() {
-  return gulp.src(paths.fonts)
+gulp.task('static', function() {
+  gulp.src(paths.fonts)
   .pipe(gulp.dest('./src/dist/fonts/'));
+  gulp.src(paths.static)
+  .pipe(gulp.dest('./src/dist/'));
 });
 

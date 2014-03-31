@@ -95,7 +95,7 @@ module.exports = function(app) {
       }
 
       req.flash('success', 'Tab for $' + total + verb + names.join(', ') + last + '!');
-      return res.redirect('/user/' + req.user.uuid);
+      return res.redirect('/user');
     });
 
     function createTab(friend, callback) {

@@ -33,7 +33,7 @@ module.exports = function(app, passport) {
           req.flash('info', 'Welcome back, ' + req.user.firstName + '.');
         }
 
-        res.redirect('/');
+        res.redirect('/user');
 
         var days = (new Date() - req.user.updatedAt) / (1000*60*60*24);
         if (days > 1 || !req.user.friends) {

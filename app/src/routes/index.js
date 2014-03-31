@@ -6,7 +6,7 @@ module.exports = function(app, passport) {
   app.get('/', function(req, res, next) {
     // Redirect to user page if they are logged in
     if (req.user) {
-      res.redirect('/user/' + req.user.uuid);
+      res.redirect('/user');
     } else {
       res.render('index');
     }
