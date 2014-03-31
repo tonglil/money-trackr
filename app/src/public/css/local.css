@@ -63,6 +63,18 @@ footer {
 #sidebar .nav-pills > li > a {
     border-radius: 0px;
 }
+#sidebar .well {
+    position: fixed;
+    min-width: 128px;
+    max-width: 44%;
+    width: 100%;
+}
+@media (min-width: 768px) {
+    #sidebar .well {
+        width: 263px;
+        max-width: 21%;
+    }
+}
 
 /*
  *Local
