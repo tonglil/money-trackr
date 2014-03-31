@@ -8,16 +8,14 @@ html
     link(rel='stylesheet' href='/css/bootstrap.min.css')
     link(rel='stylesheet' href='/css/lumen.min.css')
     link(rel='stylesheet' href='/css/local.min.css')
-    // Run in full-screen mode
     meta(content='yes' name='apple-mobile-web-app-capable')
-    // Make the status bar solid
     meta(content='black' name='apple-mobile-web-app-status-bar-style')
-    // Customize home screen title
-    meta(content=title name='apple-mobile-web-app-title')
-    // Set viewport
+    meta(content='Money Trackr' name='apple-mobile-web-app-title')
     meta(name='viewport' content='width=device-width initial-scale=1 maximum-scale=1 user-scalable=no')
     link(rel='apple-touch-icon' href='/img/apple-touch-icon.png')
-    link(rel='apple-touch-startup-image', href='/img/apple-touch-startup-image.png')
+    link(rel='apple-touch-startup-image' href='/img/apple-touch-startup-image-640x1096.png' media='(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)')
+    link(rel='apple-touch-startup-image' href='/img/apple-touch-startup-image-640x920.png' media='(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)')
+    link(rel='apple-touch-startup-image' href='/img/apple-touch-startup-image-320x460.png' media='(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)')
   body
     include includes/nav
     include includes/flash
@@ -33,11 +31,11 @@ html
               hr
               ul.nav.nav-pills.nav-stacked
                 li.active
-                  a(href='#list' data-toggle="pill") Current Tabs
+                  a(href='#list' data-toggle='pill') Current Tabs
                 li
-                  a(href='#new' data-toggle="pill") New Tab
+                  a(href='#new' data-toggle='pill') New Tab
                 li
-                  a(href='#pay' data-toggle="pill") Pay A Tab
+                  a(href='#pay' data-toggle='pill') Pay A Tab
                 li
                   a#logout(href='/logout') Log out
           // /span

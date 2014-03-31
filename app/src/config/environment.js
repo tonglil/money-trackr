@@ -16,18 +16,21 @@ module.exports = function(app) {
     app.set('port', config.port);
     app.use(express.logger('dev')); //Logs http requests in console
     app.use(express.compress());
-    //app.use(express.favicon());
+    app.use(express.favicon(path.join(__dirname, '../public/img/favicon.ico')));
     app.use(express.methodOverride());
     app.use(express.cookieParser());
     app.use(express.json());
     app.use(express.urlencoded());
-    //app.use(express.cookieSession({ secret: 'we track money', cookie: { maxAge: 60*60*1000, httpOnly: true } }));
     app.use(express.session({
       store: new redis({
         host: 'localhost',
         port: 6379
       }),
-      secret: 'tracking money'
+      secret: 'we track money',
+      cookie: {
+        maxAge: 60*60*1000,
+        httpOnly: true
+      }
     }));
     app.use(passport.initialize());
     app.use(passport.session());
