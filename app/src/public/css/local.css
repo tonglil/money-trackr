@@ -56,6 +56,10 @@ footer {
     }
 }
 
+#sidebar {
+    /*transform: translateZ(0px);*/
+    /*-webkit-transform: translateZ(0);*/
+}
 #sidebar .well {
     padding-left: 0px;
     padding-right: 0px;
@@ -64,15 +68,16 @@ footer {
     border-radius: 0px;
 }
 #sidebar .well {
-    position: fixed;
+    /*position: fixed;*/
     min-width: 128px;
-    max-width: 44%;
+    /*max-width: 85%;*/
+    max-width: 90%;
     width: 100%;
 }
 @media (min-width: 768px) {
     #sidebar .well {
-        width: 263px;
-        max-width: 21%;
+        /*min-width: 263px;*/
+        /*max-width: 21%;*/
     }
 }
 
