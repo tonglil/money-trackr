@@ -66,7 +66,7 @@ module.exports = {
       production: {
         clientID     : '227765214081308', // App ID
         clientSecret : 'd32105c064d22868c498cd25e34e0fad', // App Secret
-        callbackURL  : 'http://3000.tonyli.ca/auth/facebook/callback'
+        callbackURL  : 'http://moneytrackr.ca/auth/facebook/callback'
       }
     }
   }
