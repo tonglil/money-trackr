@@ -17,6 +17,34 @@ module.exports = function(app, passport) {
     res.json(req.user[req.params.resource]);
   });
 
+  var User = require('../models').User;
+  var Tab = require('../models').Tab;
+  app.get('/tab/:id', Auth.auth, function(req, res, next) {
+    var id = parseInt(req.params.id, 10);
+    console.log(id);
+    if (isNaN(id)) return next('not an id');
+
+    Tab.find({
+      where: {
+        id: id,
+        ownerId: req.user.uuid
+      },
+      include: [{
+        model: User,
+        as: 'Friend'
+      }]
+    }).success(function(tab) {
+      if (!tab) {
+        return res.json('none');
+      }
+
+      console.log(tab.values);
+      return res.render('tabs-id', {
+        tab: tab
+      });
+    });
+  });
+
   require('./user-auth')(app, passport);
   require('./tabs-current')(app);
   require('./tabs-new')(app);
