@@ -3657,6 +3657,10 @@
         }
       }
     },
+    "moment": {
+      "version": "2.5.1",
+      "from": "moment@"
+    },
     "mysql": {
       "version": "2.1.1",
       "from": "mysql@2.1.x",
@@ -3746,7 +3750,7 @@
     },
     "sequelize": {
       "version": "1.7.0",
-      "from": "sequelize@1.7.0",
+      "from": "https://registry.npmjs.org/sequelize/-/sequelize-1.7.0.tgz",
       "resolved": "https://registry.npmjs.org/sequelize/-/sequelize-1.7.0.tgz",
       "dependencies": {
         "commander": {
@@ -3768,10 +3772,6 @@
         "validator": {
           "version": "3.2.1",
           "from": "validator@~3.2.0"
-        },
-        "moment": {
-          "version": "2.5.1",
-          "from": "moment@~2.5.0"
         },
         "dottie": {
           "version": "0.1.0",
@@ -3816,6 +3816,10 @@
           "from": "bluebird@~1.0.0"
         }
       }
+    },
+    "validator": {
+      "version": "3.5.1",
+      "from": "validator@"
     }
   }
 }
