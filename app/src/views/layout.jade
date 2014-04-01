@@ -21,9 +21,13 @@ html
     include includes/flash
     .container.full
       .row.row-offcanvas.row-offcanvas-right
-        .col-xs-12.col-sm-9
-          block content
-        // /span
+        if (user)
+          .col-xs-12.col-sm-9
+            block content
+        else
+          .col-xs-12
+            block content
+          // /span
         if (user)
           #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
             .well.static

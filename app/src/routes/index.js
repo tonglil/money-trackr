@@ -12,7 +12,7 @@ module.exports = function(app, passport) {
     }
   });
 
-  var Auth = require('../controllers/middlewares').Auth;
+  var Auth = require('../config/middlewares').Auth;
   app.get('/sync/:resource', Auth.authApi, function(req, res, next) {
     res.json(req.user[req.params.resource]);
   });

@@ -9,7 +9,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 
 var config = require('./index').app;
-var middlewares = require('../controllers/middlewares');
+var middlewares = require('./middlewares');
 
 module.exports = function(app) {
   app.configure(function() {
@@ -28,7 +28,7 @@ module.exports = function(app) {
       }),
       secret: 'we track money',
       cookie: {
-        maxAge: 60*60*1000,
+        maxAge: 24*60*60*1000,
         httpOnly: true
       }
     }));

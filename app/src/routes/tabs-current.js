@@ -2,7 +2,7 @@
  *Current tab endpoint
  */
 
-var Auth = require('../controllers/middlewares').Auth;
+var Auth = require('../config/middlewares').Auth;
 
 var User = require('../models').User;
 var Tab = require('../models').Tab;
