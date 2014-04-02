@@ -9,6 +9,7 @@ var uglify = require('gulp-uglify');
 var minify = require('gulp-minify-css');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
+var mocha = require('gulp-mocha');
 
 var paths = {
   src: [
@@ -116,3 +117,7 @@ gulp.task('static', function() {
   .pipe(gulp.dest('./src/dist/'));
 });
 
+gulp.task('mocha:unit', function () {
+  gulp.src('../test/unit/*.js')
+    .pipe(mocha({ reporter: 'list' }));
+});
