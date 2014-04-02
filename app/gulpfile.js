@@ -121,3 +121,8 @@ gulp.task('mocha:unit', function () {
   gulp.src('../test/unit/*.js')
     .pipe(mocha({ reporter: 'list' }));
 });
+
+gulp.task('mocha:route', function () {
+  gulp.src('../test/route/*.js')
+    .pipe(mocha({ reporter: 'list' }));
+});
