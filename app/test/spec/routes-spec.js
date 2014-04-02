@@ -1,13 +1,12 @@
-var should = require("should")
-    , routes = require("../routes");
+var routes = require("../../src/routes");
 
 var request = {};
 var response = {
     viewName: ""
     , data : {}
     , render: function(view, viewData) {
-        viewName = view;
-        data = viewData;
+        this.viewName = view;
+        this.data = viewData;
     }
 };
 
