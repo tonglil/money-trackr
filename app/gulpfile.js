@@ -9,6 +9,7 @@ var uglify = require('gulp-uglify');
 var minify = require('gulp-minify-css');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
+var mocha = require('gulp-mocha');
 
 var paths = {
   src: [
@@ -34,6 +35,10 @@ gulp.task('default', function() {
 
 gulp.task('reset', ['clean'], function() {
   return gulp.start('src', 'js', 'css', 'img', 'static', 'watch');
+});
+
+gulp.task('test', function() {
+  return gulp.start('mocha-unit', 'mocha-route');
 });
 
 gulp.task('clean', function() {
@@ -116,3 +121,12 @@ gulp.task('static', function() {
   .pipe(gulp.dest('./src/dist/'));
 });
 
+gulp.task('mocha-unit', function () {
+  return gulp.src('./test/unit/*.js')
+    .pipe(mocha({ reporter: 'list' }));
+});
+
+gulp.task('mocha-route', function () {
+  return gulp.src('./test/route/*.js')
+    .pipe(mocha({ reporter: 'list' }));
+});

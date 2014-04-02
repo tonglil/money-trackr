@@ -1,9 +1,11 @@
-# You Owe Me
-An Android app to keep track of IOUs between friends
+# Money Trackr
+A cross platform app to keep track of IOUs between friends!
 
 ## Install
-* `npm install`
 * MySQL create database money\_trackr
+* Install [redis](http://redis.io/)
+* Install dependencies `npm install`
+* `cp ./app/passwords.js ./app/src/config/passwords.js` and input valid values
 
 ## Build Process
 * Build it once: `gulp`
@@ -13,6 +15,5 @@ An Android app to keep track of IOUs between friends
 * Install [nodemon](https://github.com/remy/nodemon)
 * `nodemon app/src/money-tracker.js`
 
-## Credentials
-* `cp ./app/passwords.js ./app/src/config/passwords.js`
-* Input valid values
+## Tests
+* Stop server, the run unit and route tests with: `gulp test`

@@ -18,3 +18,5 @@ node_modules/
 ignore
 dist
 passwords.js
+
+.DS_Store
