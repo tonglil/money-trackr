@@ -12,5 +12,11 @@ describe('makeCurrency(value)', function () {
     makeCurrency(input).should.be.equal((Math.round(2 * 100) / 100).toFixed(2));
   });
 
+  it('should do something else', function () {
+    var input = 'a';
+    makeCurrency(input).should.eql('NaN');
+  });
+
+
 });
 
