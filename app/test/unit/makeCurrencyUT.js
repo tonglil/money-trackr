@@ -15,4 +15,14 @@ describe('makeCurrency(value)', function() {
     var input = 'a';
     makeCurrency(input).should.eql('NaN');
   });
+  
+  it('should return a negative, 2 decimal point floating integer', function()) {
+    var input = -2;
+    makeCurrency(input).should.be.equal((Math.round(-2 * 100) / 100).toFixed(2));
+  });
+  
+  it "if input is a double value", function(){
+    var input = 2.0;
+    makeCurrency(input).should.be.equal((Math.round(2.0 * 100) / 100).toFixed(2));
+  });
 });
