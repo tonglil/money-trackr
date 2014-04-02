@@ -37,6 +37,10 @@ gulp.task('reset', ['clean'], function() {
   return gulp.start('src', 'js', 'css', 'img', 'static', 'watch');
 });
 
+gulp.task('test', function() {
+  return gulp.start('mocha-unit', 'mocha-route');
+});
+
 gulp.task('clean', function() {
   return gulp.src('./src/dist/', {
     read: false
@@ -117,12 +121,12 @@ gulp.task('static', function() {
   .pipe(gulp.dest('./src/dist/'));
 });
 
-gulp.task('mocha:unit', function () {
-  gulp.src('../test/unit/*.js')
+gulp.task('mocha-unit', function () {
+  return gulp.src('./test/unit/*.js')
     .pipe(mocha({ reporter: 'list' }));
 });
 
-gulp.task('mocha:route', function () {
-  gulp.src('../test/route/*.js')
+gulp.task('mocha-route', function () {
+  return gulp.src('./test/route/*.js')
     .pipe(mocha({ reporter: 'list' }));
 });

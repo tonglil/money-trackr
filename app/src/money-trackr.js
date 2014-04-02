@@ -35,3 +35,5 @@ db.query('SET FOREIGN_KEY_CHECKS = 0')
 });
 
 //Start the server asynchronously
+
+module.exports = app;
