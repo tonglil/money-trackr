@@ -17,6 +17,5 @@ describe('makeCurrency(value)', function () {
     makeCurrency(input).should.eql('NaN');
   });
 
-
 });
 
