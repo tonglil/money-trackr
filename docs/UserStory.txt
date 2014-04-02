@@ -1,24 +1,64 @@
-As a user, I want to be able to connect Money Trackr to my Facebook, so that I can inform my friends using facebook.
+STORY 1
 
-As a user, I want to be able to create a new friend tab, so that the related information and amount of money owed can be specified.
+Scenario S1.0 : Facebook Connection
+As a user, 
+I want to be able to connect Money Trackr to my Facebook, 
+so that I can inform my friends using facebook.
 
-As a user, I want to be able to know all the past history, so that I can keep track of my money flow from time to time.
+Scenario S1.1: Tab Creation
+As a user, 
+I want to be able to create a new friend tab, 
+so that the related information 
+and amount of money owed can be specified.
 
-As a user, I want to be able to create a new friend tab under the same friend twice, so that old amount and new amount of money will be added up.
+Scenario S1.2: Money Flow History
+As a user, 
+I want to be able to know all the past history, 
+so that I can keep track of my money flow from time to time.
 
-As a user, I want to be able to pay a tab, so that the amount of money owed will be deducted.
+Scenario S1.3: Repeated Tab 
+As a user, 
+I want to be able to create a new friend tab under the same friend twice, 
+so that old amount and new amount of money will be added up.
 
-As a user, I want to be able to specify the payment method, so that I can pay it by credit card/debit card, paypal or cash.
+Scenario S1.4: Tab Payment
+As a user, 
+I want to be able to pay a tab, 
+so that the amount of money owed will be deducted.
 
-As a user, I want to be able to create a new friend tab and specify "friend owes me" or "I owe friends", so that I can know who is the borrower and lender.
+Scenario S1.5: Payment Method
+As a user, 
+I want to be able to specify the payment method, 
+so that I can pay it by credit card/debit card, paypal or cash.
 
-As a user, I want to be able to specify the amount of money owed when I create a new tab, so that I can know the amount of money lended/borrowed.
+Scenario S1.6: Borrower or Lender
+As a user, 
+I want to be able to create a new friend tab 
+and specify "friend owes me" or "I owe friends", 
+so that I can know who is the borrower and lender.
 
-As a user, I want to be able to specify the details when I create a new friend tab, so that I can know the reason behind the money flow.
+Scenario S1.7: Specify Amount
+As a user, 
+I want to be able to specify the amount of money owed when I create a new tab, 
+so that I can know the amount of money lended/borrowed.
 
-As a user, I want to be able to specify the borrowed date, so that I can do a better financial management.
+Scenario S1.8: Tab Description
+As a user, 
+I want to be able to specify the details when I create a new friend tab, 
+so that I can know the reason behind the money flow.
 
-As a user, I want to be able to specify the deadline, so that I can notice my friends about it.
+Scenario S1.9: Borrow Date
+As a user, 
+I want to be able to specify the borrowed date, 
+so that I can do a better financial management.
 
-As a user, I want to be able to receive notification after something is updated, so that I always know all the updated news.
+Scenario S1.10: Deadline Specification
+As a user, 
+I want to be able to specify the deadline, 
+so that I can notice my friends about it.
+
+Scenario S1.11: Notification
+As a user, 
+I want to be able to receive notification after something is updated, 
+so that I always know all the updated news.
 
