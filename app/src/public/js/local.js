@@ -47,9 +47,16 @@ $(document).ready(function () {
     });
   });
 
-  $('#new-btn').click(function() {
-    $('#sidebar').find('li.active').removeClass('active');
-    $('#sidebar').find('a[href="#new"]').parent().addClass('active');
+  $('#btn-new').click(function() {
+    $('.nav li.active').removeClass('active');
+    $('.nav a[href="#new"]').parent().addClass('active');
+  });
+  $('#btn-cancel').click(function() {
+    $('.tab-content .active').removeClass('active');
+    $('.tab-content #list').addClass('active');
+    $('.nav li.active').removeClass('active');
+    $('.nav a[href="#list"]').parent().addClass('active');
+    $('.nav a[href="#list"]').tab('show');
   });
 
   function round(num) {

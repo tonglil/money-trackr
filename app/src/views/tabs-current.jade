@@ -1,51 +1,56 @@
+- var unpaid = all.filter(function(friend) {
+-   return friend.unpaid !== 0
+- })
 - var total = 0
-- friends.forEach(function(friend) {
--   total += parseFloat(friend.total)
+- unpaid.forEach(function(friend) {
+-   total += parseFloat(friend.unpaid)
 - })
 
 .page-header
   h2 Current Tabs 
-    small.lg= '(total outstanding: $' + total + ')'
+    small.lg= '(total outstanding: $' + total.toFixed(2) + ')'
 
-if friends.length > 0
-  each x, i in friends
+if unpaid.length > 0
+  each x, i in unpaid
     if i % 2 === 0
       .row
-        each friend in friends.slice(i, i+2)
-          .col-md-6
-            .panel.panel-default
-              .panel-heading.panel-sm.panel-clickable
-                .center-out
-                  - name = [friend.tabs[0].friend.firstName, friend.tabs[0].friend.lastName].reduce(function(res, val) {
-                  -   return res + (val ? ' ' + val : '');
-                  - });
-                  if (friend.tabs[0].friend.fbid)
-                    img.profile-picture.img-circle(src='http://graph.facebook.com/' + friend.tabs[0].friend.fbid + '/picture' alt=name)
-                  else
-                    img.profile-picture.img-circle(src='/img/default.jpg' alt=name)
-                  span.name= name
-                  .center-in.text-right
-                    span.badge= '$' + friend.total
-              .panel-body.panel-sm.panel-table.panel-expand
-                table.table
-                  thead
-                    tr
-                      th.date Date
-                      th.reason Description
-                      th.amount Amount
-                      th.paid Paid
-                  tbody
-                    - friend.tabs.forEach(function(tab) {
+        each friend in unpaid.slice(i, i+2)
+          if (!friend.unpaid !== 0)
+            .col-md-6
+              .panel.panel-default
+                .panel-heading.panel-sm.panel-clickable
+                  .center-out
+                    - name = [friend.firstName, friend.lastName].reduce(function(res, val) {
+                    -   return res + (val ? ' ' + val : '');
+                    - });
+                    if (friend.fbid)
+                      img.profile-picture.img-circle(src='http://graph.facebook.com/' + friend.fbid + '/picture' alt=name)
+                    else
+                      img.profile-picture.img-circle(src='/img/default.jpg' alt=name)
+                    span.name= name
+                    .center-in.text-right
+                      span.badge= '$' + friend.unpaid
+                .panel-body.panel-sm.panel-table.panel-expand
+                  table.table
+                    thead
                       tr
-                        td.date
-                          a(href='/tab/' + tab.id)= tab.date
-                        td.reason= tab.description
-                        td.amount= '$' + tab.owe
-                        td.paid.text-center.pay-tab(tab=tab.id)
-                    - })
+                        th.date Date
+                        th.reason Description
+                        th.amount Amount
+                        th.paid Paid
+                    tbody
+                      - friend.tabs.forEach(function(tab) {
+                      if (!tab.paid)
+                        tr
+                          td.date
+                            a(href='/tab/' + tab.id)= tab.date
+                          td.reason= tab.description
+                          td.amount= '$' + tab.owe.toFixed(2)
+                          td.paid.text-center.pay-tab(tab=tab.id)
+                      - })
 else
   .jumbotron
     h1 All tidied up!
 
 .row.text-center
-  a#new-btn.btn.btn-info.btn-big(href="#new" data-toggle="pill") + New Tab
+  a#btn-new.btn.btn-info.btn-big(href="#new" data-toggle="pill") + New Tab

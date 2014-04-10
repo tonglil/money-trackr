@@ -11,58 +11,48 @@ var moment = require('moment');
 
 module.exports = function(app) {
   app.get('/user', Auth.auth, function(req, res, next) {
-    User.find({
+    Tab.findAll({
       where: {
-        uuid: req.user.uuid
+        ownerId: req.user.uuid
       },
       include: [{
-        model: Tab,
-        as: 'Tabs',
-        where: {
-          paid: false
-        },
-        include: [{
-          model: User,
-          as: 'Friend'
-        }]
+        model: User,
+        as: 'Friend'
       }]
-    }).success(function(user) {
-      if (!user) {
-        return res.render('user', {
-          friends: []
-        });
-      }
-
-      var friends = _(user.tabs)
-      .groupBy(function(tab) {
-        return tab.friendId;
-      })
-      .map(function(tabs) {
-        var collection = {};
-        collection.tabs = _(tabs)
+    }).success(function(tabs) {
+      var all = _(tabs)
         .map(function(tab) {
           var val = tab.values;
           val.date = moment(val.date).format('M/D/YYYY');
           if (val.deadline) val.deadline = moment(val.deadline).format('M/D/YYYY');
-          val.owe = val.owe.toFixed(2);
+          if (val.paidOn) val.paidOn = moment(val.paidOn).format('M/D/YYYY');
           val.friend = (tab.friend ? tab.friend.values : null);
           return val;
         })
+        .groupBy(function(tab) {
+          return tab.friendId;
+        })
+        .map(function(friend) {
+          var total = 0;
+          var unpaid = 0;
+          var person = friend[0].friend;
+          mappedTabs = _(friend)
+            .map(function(tab) {
+              total += tab.owe;
+              if (!tab.paid) unpaid += tab.owe;
+              delete tab.friend;
+              return tab;
+            })
+            .value();
+          person.total = total;
+          person.unpaid = unpaid;
+          person.tabs = mappedTabs;
+          return person;
+        })
         .value();
-        return collection;
-      })
-      //TODO: extract the friend into a collection.friend field
-      .map(function(friend) {
-        friend.total = _(friend.tabs)
-        .reduce(function(sum, tab) {
-          return sum + parseFloat(tab.owe);
-        }, 0).toFixed(2);
-        return friend;
-      })
-      .value();
 
       return res.render('user', {
-        friends: friends
+        all: all,
       });
     }).error(function(err) {
       return next(err);
