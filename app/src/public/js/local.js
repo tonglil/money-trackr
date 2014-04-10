@@ -3,10 +3,49 @@ $(document).ready(function () {
     $('.row-offcanvas').toggleClass('active');
   });
 
+  // Dismiss alerts
   window.setTimeout(function() {
     $('.alert-info').addClass('fade');
     $(".alert-info").alert('close');
+    $('.alert-success').addClass('fade');
+    $(".alert-success").alert('close');
   }, 3000);
+
+  // Expand/collapse panels
+  $(document).on('click', '.panel-heading span.panel-clickable', function(e) {
+    var $this = $(this);
+    if (!$this.hasClass('panel-collapsed')) {
+      $this.parents('.panel').find('.panel-body').slideUp();
+      $this.addClass('panel-collapsed');
+    } else {
+      $this.parents('.panel').find('.panel-body').slideDown();
+      $this.removeClass('panel-collapsed');
+    }
+  });
+  $(document).on('click', '.panel div.panel-clickable', function(e) {
+    var $this = $(this);
+    if (!$this.hasClass('panel-collapsed')) {
+      $this.parents('.panel').find('.panel-body').slideUp();
+      $this.addClass('panel-collapsed');
+    } else {
+      $this.parents('.panel').find('.panel-body').slideDown();
+      $this.removeClass('panel-collapsed');
+    }
+  });
+  $('.panel-heading span.panel-clickable').click();
+  $('.panel div.panel-clickable').click();
+
+  $('.pay-tab').click(function() {
+    var el = $(this);
+    var id = el.attr('tab');
+    console.log(id);
+    $.ajax({
+      url: '/tab/' + id + '/paid',
+      type: 'POST'
+    }).success(function(data) {
+      el.parent('tr').remove();
+    });
+  });
 
   $('#new-btn').click(function() {
     $('#sidebar').find('li.active').removeClass('active');
@@ -111,30 +150,6 @@ $(document).ready(function () {
       });
     }
   });
-
-  // Expand/collapse panels
-  $(document).on('click', '.panel-heading span.panel-clickable', function(e) {
-    var $this = $(this);
-    if (!$this.hasClass('panel-collapsed')) {
-      $this.parents('.panel').find('.panel-body').slideUp();
-      $this.addClass('panel-collapsed');
-    } else {
-      $this.parents('.panel').find('.panel-body').slideDown();
-      $this.removeClass('panel-collapsed');
-    }
-  });
-  $(document).on('click', '.panel div.panel-clickable', function(e) {
-    var $this = $(this);
-    if (!$this.hasClass('panel-collapsed')) {
-      $this.parents('.panel').find('.panel-body').slideUp();
-      $this.addClass('panel-collapsed');
-    } else {
-      $this.parents('.panel').find('.panel-body').slideDown();
-      $this.removeClass('panel-collapsed');
-    }
-  });
-  $('.panel-heading span.panel-clickable').click();
-  $('.panel div.panel-clickable').click();
 
   // Remove extra form fields
   $(document).on('click', '.btn-remove', function(e) {

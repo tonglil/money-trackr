@@ -18,12 +18,21 @@ module.exports = function(app) {
       include: [{
         model: Tab,
         as: 'Tabs',
+        where: {
+          paid: false
+        },
         include: [{
           model: User,
           as: 'Friend'
         }]
       }]
     }).success(function(user) {
+      if (!user) {
+        return res.render('user', {
+          friends: []
+        });
+      }
+
       var friends = _(user.tabs)
       .groupBy(function(tab) {
         return tab.friendId;

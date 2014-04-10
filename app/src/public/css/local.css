@@ -180,7 +180,7 @@ small.lg {
 }
 
 .panel-sm {
-    padding: 8px 16px;
+    padding: 8px 12px;
 }
 .center-out {
     display: table;
@@ -221,7 +221,7 @@ small.lg {
 }
 .panel-table th.reason,
 .panel-table td.reason {
-    width: 60%;
+    width: 55%;
     padding: 0 0 0 8px;
 }
 .panel-table th.amount,
@@ -229,6 +229,23 @@ small.lg {
     width: 20%;
     padding: 0 0 0 8px;
 }
+.panel-table th.paid,
+.panel-table td.paid {
+    width: 5%;
+    padding: 0 0 0 8px;
+}
+.pay-tab:after {
+    content: "\e157";
+    font-family: "Glyphicons Halflings";
+    text-decoration: none;
+    color: #FF7701;
+    cursor: pointer;
+}
+.pay-tab:hover:after {
+    content: "\e067";
+    color: #28B62C;
+}
+
 
 /*
  *New Tab

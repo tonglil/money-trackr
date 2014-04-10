@@ -33,6 +33,7 @@ if friends.length > 0
                       th.date Date
                       th.reason Description
                       th.amount Amount
+                      th.paid Paid
                   tbody
                     - friend.tabs.forEach(function(tab) {
                       tr
@@ -40,6 +41,7 @@ if friends.length > 0
                           a(href='/tab/' + tab.id)= tab.date
                         td.reason= tab.description
                         td.amount= '$' + tab.owe
+                        td.paid.text-center.pay-tab(tab=tab.id)
                     - })
 else
   .jumbotron

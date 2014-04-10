@@ -78,6 +78,14 @@ module.exports = function(DB, Type) {
       allowNull: false,
       defaultValue: false
     },
+    paidOn: {
+      type: Type.DATE,
+      allowNull: true,
+      validate: {
+        notEmpty: true,
+        isDate: true
+      }
+    },
     ownerId: {
       type: Type.UUID,
       references: 'Users',

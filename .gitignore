@@ -18,3 +18,4 @@ node_modules/
 ignore
 dist
 passwords.js
+config.json

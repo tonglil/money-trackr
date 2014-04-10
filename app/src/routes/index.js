@@ -46,6 +46,7 @@ module.exports = function(app, passport) {
   });
 
   require('./user-auth')(app, passport);
+  require('./tab')(app);
   require('./tabs-current')(app);
   require('./tabs-new')(app);
   require('./base')(app);
