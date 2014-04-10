@@ -1,6 +1,25 @@
 $(document).ready(function () {
+  // For iOS Apps
+  // Open all links in the iOS web app
+  if (('standalone' in window.navigator) && window.navigator.standalone) {
+    FastClick.attach(document.body);
+
+    $('a').on('click', function(e){
+      e.preventDefault();
+      var new_location = $(this).attr('href');
+      if (new_location !== undefined && new_location.substr(0, 1) != '#' && $(this).attr('data-method') === undefined){
+        window.location = new_location;
+      }
+    });
+  }
+
   $('[data-toggle=offcanvas]').click(function() {
+    window.scrollTo(0, 0);
     $('.row-offcanvas').toggleClass('active');
+  });
+
+  $('ul li [data-toggle=pill]').click(function() {
+    $('[data-toggle=offcanvas]').click();
   });
 
   // Dismiss alerts
@@ -38,7 +57,6 @@ $(document).ready(function () {
   $('.pay-tab').click(function() {
     var el = $(this);
     var id = el.attr('tab');
-    console.log(id);
     $.ajax({
       url: '/tab/' + id + '/paid',
       type: 'POST'
@@ -52,6 +70,14 @@ $(document).ready(function () {
     $('.nav a[href="#new"]').parent().addClass('active');
   });
   $('#btn-cancel').click(function() {
+    $('.has-error').removeClass('has-error');
+    $('.has-success').removeClass('has-success');
+    $('#includeMe').removeClass().addClass('btn btn-block btn-default');
+    $('input.includeMe').val('false');
+    $('#addTip').val('false').removeClass().addClass('btn btn-block btn-default');
+    $('.range').slideUp(0);
+    $('span.total').html('0.00');
+    $('input.total').val(0);
     $('.tab-content .active').removeClass('active');
     $('.tab-content #list').addClass('active');
     $('.nav li.active').removeClass('active');
@@ -79,20 +105,32 @@ $(document).ready(function () {
     $('input.total').val(total);
   }
 
+  $('#includeMe').click(function() {
+    var btn = $(this);
+    var el = $('input.includeMe');
+    if (el.val() === 'true') {
+      // Remove me
+      el.val('false');
+      btn.removeClass().addClass('btn btn-block btn-default');
+    } else {
+      // Add me
+      el.val('true');
+      btn.removeClass().addClass('btn btn-block btn-success');
+    }
+  });
+
   $('#addTip').click(function() {
     var el = $(this);
     if (el.val() === 'true') {
       // Remove tip
       el.val('false');
-      el.removeClass();
-      el.addClass('btn btn-block btn-default');
+      el.removeClass().addClass('btn btn-block btn-default');
       $('.range').slideUp(0);
       setTotal(false);
     } else {
       // Add tip
       el.val('true');
-      el.removeClass();
-      el.addClass('btn btn-block btn-success');
+      el.removeClass().addClass('btn btn-block btn-success');
       $('.range').addClass('range-table').slideDown(0);
       setTotal(true);
     }
@@ -178,8 +216,6 @@ $(document).ready(function () {
     var el = nameElement(id);
     $(el).insertAfter(field);
     if (id == 1) {
-      //console.log($(el).children('pre').slice(0,5).remove());
-      //console.log($(el).children('.tt-input.tt-hint').remove());
       $('input#1').parent().remove();
       el = nameElement(1);
       delegateInputTypeahead();
@@ -219,7 +255,7 @@ $(document).ready(function () {
       displayKey: 'name',
       source: nameTA.ttAdapter(),
       templates: {
-        suggestion: _.template('<p><img class="profile-picture-tt img-circle" src="http://graph.facebook.com/<%=id%>/picture"><%=name%></p>')
+        suggestion: _.template('<p><img class="profile-picture-tt img-circle" src="http://graph.facebook.com/<%=id%>/picture" alt=""><%=name%></p>')
       }
     }).on('typeahead:opened', function() {
       $('.tt-dropdown-menu').css('width', '100%');
@@ -231,7 +267,7 @@ $(document).ready(function () {
   function nameElement(id) {
     var el = document.createElement('div');
     el.setAttribute('class', 'form-group input-group');
-    el.innerHTML = '<input id="' + id + '" class="typeahead form-control name" data-provide="typeahead" data-items="5" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
+    el.innerHTML = '<input id="' + id + '" class="typeahead form-control name" data-provide="typeahead" data-items="5" type="text" name="names[]" data-toggle="tooltip" data-placement="top" title="required" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="required"/><span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>';
     el.innerHTML += '<input id="name' + id + '" type="hidden" name="ids[]" value="0"/>';
     return el;
   }
@@ -246,20 +282,6 @@ $(document).ready(function () {
     $('#new-tab').one('DOMNodeInserted', function(e) {
       var el = $(e.target);
       nameInputTA(el.children('input.typeahead'));
-    });
-  }
-
-  // For iOS Apps
-  // Open all links in the iOS web app
-  if (('standalone' in window.navigator) && window.navigator.standalone) {
-    FastClick.attach(document.body);
-
-    $('a').on('click', function(e){
-      e.preventDefault();
-      var new_location = $(this).attr('href');
-      if (new_location !== undefined && new_location.substr(0, 1) != '#' && $(this).attr('data-method') === undefined){
-        window.location = new_location;
-      }
     });
   }
 

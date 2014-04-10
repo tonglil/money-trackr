@@ -24,9 +24,9 @@ if unpaid.length > 0
                     -   return res + (val ? ' ' + val : '');
                     - });
                     if (friend.fbid)
-                      img.profile-picture.img-circle(src='http://graph.facebook.com/' + friend.fbid + '/picture' alt=name)
+                      img.profile-picture.img-circle(src='http://graph.facebook.com/' + friend.fbid + '/picture' alt='')
                     else
-                      img.profile-picture.img-circle(src='/img/default.jpg' alt=name)
+                      img.profile-picture.img-circle(src='/img/default.jpg' alt='')
                     span.name= name
                     .center-in.text-right
                       span.badge= '$' + friend.unpaid
@@ -53,4 +53,4 @@ else
     h1 All tidied up!
 
 .row.text-center
-  a#btn-new.btn.btn-info.btn-big(href="#new" data-toggle="pill") + New Tab
+  a.btn-new.btn.btn-info.btn-big(href="#new" data-toggle="pill") + New Tab

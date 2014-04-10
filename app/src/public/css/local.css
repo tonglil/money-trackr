@@ -238,7 +238,6 @@ small.lg {
     content: "\e157";
     font-family: "Glyphicons Halflings";
     text-decoration: none;
-    color: #FF7701;
     cursor: pointer;
 }
 .pay-tab:hover:after {
@@ -274,7 +273,10 @@ small.lg {
 }
 .glyphicon-pad-right {
     padding-right: 4px;
-    vertical-align: sub;
+}
+.form-buttons .btn {
+    display: inline-block;
+    margin: 4px 8px;
 }
 
 

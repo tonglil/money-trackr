@@ -1,76 +1,77 @@
 .page-header
   h2 New Tab
 
-form#new-tab(method='post' action='/tab/new')
-  label Amount Owing ($)
-  .form-group
-    input#amount.form-control(autofocus type='number' name='amount' data-toggle='tooltip' data-placement='top' title='required; must be a number')
+form#new-tab(method='post' action='/tab/new').row
+  .col-md-6
+    label Amount Owing ($)
+    .form-group
+      input#amount.form-control(autofocus type='number' name='amount' data-toggle='tooltip' data-placement='top' title='required; must be a number' placeholder='required')
 
-  //-label Name 
-    //-small (multiple names implies an even split)
-  //-.form-group.input-group
-    //-input.typeahead.form-control(type='text' name='names[]' data-provide='typeahead' data-toggle='tooltip' data-placement='top' title='required' autocomplete='off' autocorrect='off' autocapitalize='off')
-    //-span.input-group-btn
-      //-button.btn.btn-default.btn-add(type='button') +
+    label Name 
+      small (multiple names implies an even split)
+    #names
+      input#reset
+      span.input-group-btn
+        button.btn.btn-default.btn-add(type='button') +
 
-  label Name 
-    small (multiple names implies an even split)
-  #names
-    input#reset
-    span.input-group-btn
-      button.btn.btn-default.btn-add(type='button') +
+    .form-group.row
+      #includeMe.btn.btn-default.btn-block
+        span.glyphicon.glyphicon-user.glyphicon-pad-right
+        | Include Me
+        input.includeMe(type='hidden' name='includeMe' value='false')
 
-  label Description
-  .form-group
-    input.form-control(type='text' name='description')
-    //-textarea.form-control(rows='3' name='description')
+    hr
 
-  label Date
-  .form-group
-    input.form-control.date-input(type='date' name='date')
+  .col-md-6
+    label Description
+    .form-group
+      input.form-control(type='text' name='description')
+      //-textarea.form-control(rows='3' name='description')
 
-  label Deadline
-  .form-group
-    input.form-control.date-input(type='date' name='deadline')
+    label Date
+    .form-group
+      input.form-control.date-input(type='date' name='date' placeholder='mm/dd/yyyy')
 
-  hr
+    label Deadline
+    .form-group
+      input.form-control.date-input(type='date' name='deadline' placeholder='mm/dd/yyyy')
 
-  // Possible to have a tax field as well
-  .form-group.row
-    button#addTip.btn.btn-default.btn-block(type='button' name='addTip' value='false')
-      span.glyphicon.glyphicon-thumbs-up.glyphicon-pad-right
-      | Add Tip (%)
+    label Paid Using
+    .form-group
+      select.form-control(name='payment')
+        option(value='other') Other
+        option(value='cash') Cash
+        option(value='credit') Credit
+        option(value='debit') Debit
 
-  .form-group.range.temp-hide
-    input(id='tip' type='range' oninput='tipNum.value=value' value='0' max='50' min='0' name='tip')
-    span.input-group-btn
-      #tipNum.btn.btn-default.btn-fake 0%
+    hr
 
-  hr
+    // Possible to have a tax field as well
+    .form-group.row
+      button#addTip.btn.btn-default.btn-block(type='button' value='false')
+        span.glyphicon.glyphicon-thumbs-up.glyphicon-pad-right
+        | Add Tip (%)
 
-  label Paid Using
-  .form-group
-    select.form-control(name='payment')
-      option(value='other') Other
-      option(value='cash') Cash
-      option(value='credit') Credit
-      option(value='debit') Debit
+    .form-group.range.temp-hide
+      input(id='tip' type='range' oninput='tipNum.value=value' value='0' max='50' min='0' name='tip')
+      span.input-group-btn
+        #tipNum.btn.btn-default.btn-fake 0%
 
-  // Possible save receipt for proof
-  //-label Upload receipt
-  //-.form-group.text-center
-    //-input.text-center.btn.btn-default.btn-block(type='file' name='receipt')
+    // Possible save receipt for proof
+    //-label Upload receipt
+    //-.form-group.text-center
+      //-input.text-center.btn.btn-default.btn-block(type='file' name='receipt')
 
-  hr
+  .col-md-12
+    hr
 
-  h3 Total: 
-    | $
-    span.total 0.00
-    input.total(type='hidden' name='total' value='0')
+    h3 Total: 
+      | $
+      span.total 0.00
+      input.total(type='hidden' name='total' value='0')
 
-  hr
+    hr
 
-  .row.text-center
+  .form-buttons.text-center
     input#btn-add.btn.btn-info.btn-big(type='submit' value='Add Tab')
-    | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    input#btn-cancel.btn.btn-warning.btn-big(type='reset' value='Cancel' data-toggle='pill')
+    input#btn-cancel.btn.btn-warning.btn-big(type='reset' value='Cancel')

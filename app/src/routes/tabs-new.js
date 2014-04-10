@@ -26,6 +26,7 @@ module.exports = function(app) {
       if (!isNaN(n)) return n;
     });
     var partySize = ids.length;
+    var includeMe = Boolean(body.includeMe);
 
     var description = validator.escape(validator.trim(body.description)) || null;
     var payment = validator.escape(validator.trim(body.payment)) || null;
@@ -41,21 +42,12 @@ module.exports = function(app) {
       return next('form values are missing');
     }
 
+    if (includeMe) partySize++;
+
     //TODO: more name and id validations:
     //- name must match id based on friend list
     //- name must exist in friend list if id != 0
     //- if id === 0 user can exist in custom list, then new user
-    /*
-     *{ amount: '50',
-     *  names: [ 'Josh Compagnyolo', 'Aneel Mawji' ],
-     *  ids: [ '514588664', '515969532' ],
-     *  description: 'Did some stuff together...',
-     *  date: 'TODAY',
-     *  deadline: 'TOMORROW',
-     *  tip: '15',
-     *  payment: 'other',
-     *  total: '57.50' }
-     */
 
     each(ids, names, function(id, name, callback) {
       if (id === 0) {
