@@ -13,6 +13,16 @@ $(document).ready(function () {
     $('#sidebar').find('a[href="#new"]').parent().addClass('active');
   });
 
+  //var content = document.getElementById('page');
+  var draggable = document.body;
+  var hammertime = Hammer(draggable).on('swipeleft', function(e) {
+    window.scrollTo(0, 0);
+    $('.row-offcanvas').addClass('active');
+  });
+  var hammertime = Hammer(draggable).on('swiperight', function(e) {
+    $('.row-offcanvas').removeClass('active');
+  });
+
   function round(num) {
     return (Math.round(num * 100) / 100).toFixed(2);
   }
